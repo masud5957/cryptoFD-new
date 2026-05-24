@@ -141,7 +141,7 @@ export function BalanceTable({
             </div>
             <div className="flex gap-2">
               <Button asChild variant="outline" size="sm" className="gap-1.5">
-                <Link href="/dashboard/create-fd">
+                <Link href="/dashboard/create-fd?reinvest=true">
                   Reinvest Balance
                   <ArrowRight className="h-4 w-4" />
                 </Link>

@@ -12,10 +12,12 @@ import {
   Shield,
   ArrowDownToLine,
   ArrowUpFromLine,
+  BarChart3,
 } from "lucide-react"
 
 const navigation = [
   { name: "Overview", href: "/admin", icon: LayoutDashboard },
+  { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { name: "Users", href: "/admin/users", icon: Users },
   { name: "All Transactions", href: "/admin/transactions", icon: Receipt },
   { name: "Pending Deposits", href: "/admin/deposits", icon: ArrowDownToLine },

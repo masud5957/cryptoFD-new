@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useMemo, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Check, Clock, Loader2, AlertCircle } from "lucide-react"
+import { Check, Clock, Loader2, AlertCircle, Sparkles } from "lucide-react"
 import { createFD } from "@/lib/actions"
 import type { FDPlan } from "@/lib/types"
 
@@ -16,12 +16,81 @@ interface CreateFDFormProps {
   availableBalance: number
 }
 
+// Find the best matching plan for a given amount
+function findBestPlanForAmount(plans: FDPlan[], amount: number): FDPlan | null {
+  if (amount <= 0 || plans.length === 0) return null
+  
+  // Find plans where the amount fits within min/max range
+  const matchingPlans = plans.filter(
+    (plan) => amount >= plan.minAmount && amount <= plan.maxAmount
+  )
+  
+  if (matchingPlans.length > 0) {
+    // Return the plan with highest daily ROI among matching plans
+    return matchingPlans.reduce((best, current) => 
+      current.dailyRoi > best.dailyRoi ? current : best
+    )
+  }
+  
+  // If no exact match, find the closest plan
+  // First try plans where amount is above minAmount (user can invest that amount)
+  const plansAboveMin = plans.filter((plan) => amount >= plan.minAmount)
+  if (plansAboveMin.length > 0) {
+    // Return the plan with highest minAmount that's still below the amount
+    return plansAboveMin.reduce((best, current) => 
+      current.minAmount > best.minAmount ? current : best
+    )
+  }
+  
+  // If amount is below all minimums, return the plan with lowest minimum
+  return plans.reduce((lowest, current) => 
+    current.minAmount < lowest.minAmount ? current : lowest
+  )
+}
+
 export function CreateFDForm({ plans, availableBalance }: CreateFDFormProps) {
   const router = useRouter()
-  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(plans[1]?.id || plans[0]?.id || null)
-  const [amount, setAmount] = useState("")
+  const searchParams = useSearchParams()
+  const isReinvest = searchParams.get("reinvest") === "true"
+  
+  // Auto-select best plan based on available balance for reinvest
+  const recommendedPlan = useMemo(() => {
+    return findBestPlanForAmount(plans, availableBalance)
+  }, [plans, availableBalance])
+  
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(() => {
+    // If reinvesting, auto-select the recommended plan
+    if (isReinvest && recommendedPlan) {
+      return recommendedPlan.id
+    }
+    return plans[1]?.id || plans[0]?.id || null
+  })
+  
+  const [amount, setAmount] = useState(() => {
+    // If reinvesting, pre-fill with available balance
+    if (isReinvest && availableBalance > 0) {
+      return availableBalance.toString()
+    }
+    return ""
+  })
+  
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  
+  // Auto-select plan when amount changes
+  useEffect(() => {
+    const amountNum = parseFloat(amount) || 0
+    if (amountNum > 0) {
+      const bestPlan = findBestPlanForAmount(plans, amountNum)
+      if (bestPlan && bestPlan.id !== selectedPlanId) {
+        // Only auto-switch if the current plan doesn't support this amount
+        const currentPlan = plans.find(p => p.id === selectedPlanId)
+        if (currentPlan && (amountNum < currentPlan.minAmount || amountNum > currentPlan.maxAmount)) {
+          setSelectedPlanId(bestPlan.id)
+        }
+      }
+    }
+  }, [amount, plans, selectedPlanId])
 
   const selectedPlan = plans.find((p) => p.id === selectedPlanId)
   const amountNum = parseFloat(amount) || 0
@@ -86,7 +155,9 @@ export function CreateFDForm({ plans, availableBalance }: CreateFDFormProps) {
 
       {/* FD Plans */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        {plans.map((plan, index) => (
+        {plans.map((plan, index) => {
+          const isRecommended = recommendedPlan?.id === plan.id && availableBalance > 0
+          return (
           <Card
             key={plan.id}
             onClick={() => setSelectedPlanId(plan.id)}
@@ -96,7 +167,13 @@ export function CreateFDForm({ plans, availableBalance }: CreateFDFormProps) {
                 : "border-border bg-card"
             }`}
           >
-            {index === 2 && (
+            {isRecommended && (
+              <Badge className="absolute -top-2 left-4 bg-emerald-500 text-white flex items-center gap-1">
+                <Sparkles className="h-3 w-3" />
+                Best Match
+              </Badge>
+            )}
+            {index === 2 && !isRecommended && (
               <Badge className="absolute -top-2 right-4 bg-primary text-primary-foreground">
                 Popular
               </Badge>
@@ -128,7 +205,7 @@ export function CreateFDForm({ plans, availableBalance }: CreateFDFormProps) {
               ${plan.minAmount.toLocaleString()} - ${plan.maxAmount.toLocaleString()}
             </div>
           </Card>
-        ))}
+        )})}
       </div>
 
       {/* Amount Input */}

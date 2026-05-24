@@ -187,3 +187,122 @@ export async function getAdminFDPlans(): Promise<FDPlan[]> {
     dailyRoi: Number(p.dailyRoi),
   }))
 }
+
+// Analytics: Top depositors by total deposits
+export async function getTopDepositors(limit: number = 10) {
+  const deposits = await prisma.transaction.groupBy({
+    by: ['userId'],
+    where: { 
+      type: 'deposit', 
+      status: 'completed' 
+    },
+    _sum: { amount: true },
+    _count: { id: true },
+    orderBy: { _sum: { amount: 'desc' } },
+    take: limit
+  })
+  
+  // Get user details
+  const userIds = deposits.map(d => d.userId)
+  const users = await prisma.profile.findMany({
+    where: { id: { in: userIds } },
+    select: { id: true, name: true, email: true, createdAt: true, walletBalance: true, lockedBalance: true }
+  })
+  
+  const userMap = new Map(users.map(u => [u.id, u]))
+  
+  return deposits.map(d => ({
+    userId: d.userId,
+    totalDeposits: Number(d._sum.amount) || 0,
+    depositCount: d._count.id,
+    user: userMap.get(d.userId) ? {
+      name: userMap.get(d.userId)!.name,
+      email: userMap.get(d.userId)!.email,
+      createdAt: userMap.get(d.userId)!.createdAt,
+      walletBalance: Number(userMap.get(d.userId)!.walletBalance),
+      lockedBalance: Number(userMap.get(d.userId)!.lockedBalance),
+    } : null
+  }))
+}
+
+// Analytics: Top team leaders by referral count and earnings
+export async function getTopTeamLeaders(limit: number = 10) {
+  // Get referral counts for each referrer (level 1 direct referrals)
+  const referralCounts = await prisma.referral.groupBy({
+    by: ['referrerId'],
+    where: { level: 1 },
+    _count: { id: true }
+  })
+  
+  // Get all referrals for team size calculation (all levels)
+  const allReferrals = await prisma.referral.groupBy({
+    by: ['referrerId'],
+    _count: { id: true }
+  })
+  
+  // Get user details with referral earnings
+  const referrerIds = [...new Set([...referralCounts.map(r => r.referrerId), ...allReferrals.map(r => r.referrerId)])]
+  const users = await prisma.profile.findMany({
+    where: { id: { in: referrerIds } },
+    select: { 
+      id: true, 
+      name: true, 
+      email: true, 
+      referralEarnings: true, 
+      createdAt: true,
+      walletBalance: true
+    }
+  })
+  
+  const userMap = new Map(users.map(u => [u.id, u]))
+  const directReferralMap = new Map(referralCounts.map(r => [r.referrerId, r._count.id]))
+  const totalTeamMap = new Map(allReferrals.map(r => [r.referrerId, r._count.id]))
+  
+  // Build the result array sorted by referral earnings
+  const result = users
+    .map(user => ({
+      userId: user.id,
+      name: user.name,
+      email: user.email,
+      directReferrals: directReferralMap.get(user.id) || 0,
+      totalTeamSize: totalTeamMap.get(user.id) || 0,
+      referralEarnings: Number(user.referralEarnings),
+      walletBalance: Number(user.walletBalance),
+      createdAt: user.createdAt
+    }))
+    .sort((a, b) => b.referralEarnings - a.referralEarnings)
+    .slice(0, limit)
+  
+  return result
+}
+
+// Analytics: Get overall platform referral stats
+export async function getReferralStats() {
+  const totalReferrals = await prisma.referral.count()
+  const level1Referrals = await prisma.referral.count({ where: { level: 1 } })
+  const level2Referrals = await prisma.referral.count({ where: { level: 2 } })
+  const level3Referrals = await prisma.referral.count({ where: { level: 3 } })
+  
+  // Total referral earnings paid out
+  const referralTransactions = await prisma.transaction.findMany({
+    where: { type: 'referral_commission', status: 'completed' },
+    select: { amount: true }
+  })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const totalReferralEarnings = referralTransactions.reduce((acc: number, t: any) => acc + Number(t.amount), 0)
+  
+  // Users with at least one referral
+  const usersWithReferrals = await prisma.referral.groupBy({
+    by: ['referrerId'],
+    _count: { id: true }
+  })
+  
+  return {
+    totalReferrals,
+    level1Referrals,
+    level2Referrals,
+    level3Referrals,
+    totalReferralEarnings,
+    usersWithReferrals: usersWithReferrals.length
+  }
+}
