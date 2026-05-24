@@ -13,17 +13,21 @@ import {
   Gift,
   Settings,
   Hexagon,
+  LineChart,
+  Info,
 } from "lucide-react"
 
 const menuItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Create FD", href: "/dashboard/create-fd", icon: PlusCircle },
-  { name: "My FDs", href: "/dashboard/my-fds", icon: Layers },
+  { name: "New Investment", href: "/dashboard/create-fd", icon: PlusCircle },
+  { name: "My Investments", href: "/dashboard/my-fds", icon: Layers },
   { name: "Wallet", href: "/dashboard/wallet", icon: Wallet },
   { name: "Transactions", href: "/dashboard/transactions", icon: ArrowLeftRight },
+  { name: "Our Works", href: "/dashboard/our-works", icon: LineChart },
   { name: "Team", href: "/dashboard/team", icon: Users },
   { name: "Referral", href: "/dashboard/referral", icon: Gift },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
+  { name: "About Us", href: "/dashboard/about", icon: Info },
 ]
 
 export function MobileSidebar() {

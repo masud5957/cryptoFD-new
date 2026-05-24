@@ -16,6 +16,7 @@ import {
   HelpCircle,
   ExternalLink,
   Info,
+  LineChart,
 } from "lucide-react"
 
 const menuItems = [
@@ -24,6 +25,7 @@ const menuItems = [
   { name: "My Investments", href: "/dashboard/my-fds", icon: Layers },
   { name: "Wallet", href: "/dashboard/wallet", icon: Wallet },
   { name: "Transactions", href: "/dashboard/transactions", icon: ArrowLeftRight },
+  { name: "Our Works", href: "/dashboard/our-works", icon: LineChart },
   { name: "My Team", href: "/dashboard/team", icon: Users },
   { name: "Referral Program", href: "/dashboard/referral", icon: Gift },
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
