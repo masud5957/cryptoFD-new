@@ -152,6 +152,12 @@ export async function requestWithdrawal(amount: number, address: string) {
     return { error: "Profile not found" }
   }
 
+  // Check if withdrawal is disabled for this user
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((profile as any).withdrawalDisabled) {
+    return { error: "Withdrawals are currently disabled for your account. Please contact support." }
+  }
+
   // Available = wallet_balance (includes deposits, earnings, referral)
   const totalAvailable = Number(profile.walletBalance)
   

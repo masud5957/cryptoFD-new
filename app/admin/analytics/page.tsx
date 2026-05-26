@@ -17,7 +17,8 @@ import {
   Target,
   Wallet,
   Clock,
-  ArrowUpFromLine
+  ArrowUpFromLine,
+  Ban
 } from "lucide-react"
 import { 
   getTopDepositors, 
@@ -29,6 +30,7 @@ import {
   getHighPotentialDepositors,
   getPlatformEarningsSummary
 } from "@/lib/admin-queries"
+import { WithdrawalToggle } from "./withdrawal-toggle"
 
 export default async function AdminAnalyticsPage() {
   const [
@@ -153,12 +155,13 @@ export default async function AdminAnalyticsPage() {
 
       {/* Tabs for different analytics views */}
       <Tabs defaultValue="fd-creators" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-flex">
+        <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:inline-flex">
           <TabsTrigger value="fd-creators">Top FD Creators</TabsTrigger>
           <TabsTrigger value="team-leaders">Team Leaders</TabsTrigger>
           <TabsTrigger value="user-earnings">User Earnings</TabsTrigger>
           <TabsTrigger value="depositors">Top Depositors</TabsTrigger>
           <TabsTrigger value="potential">High Potential</TabsTrigger>
+          <TabsTrigger value="withdrawal-control" className="text-red-500">Withdrawal Control</TabsTrigger>
         </TabsList>
 
         {/* Top FD Creators Tab */}
@@ -464,6 +467,87 @@ export default async function AdminAnalyticsPage() {
                   {highPotentialDepositors.length === 0 && (
                     <tr>
                       <td colSpan={8} className="py-8 text-center text-muted-foreground">No deposit history yet</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+        </TabsContent>
+
+        {/* Withdrawal Control Tab */}
+        <TabsContent value="withdrawal-control">
+          <Card className="rounded-2xl border-border bg-card p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Ban className="h-5 w-5 text-red-500" />
+              <h3 className="text-lg font-semibold text-foreground">Withdrawal Control</h3>
+              <Badge variant="secondary" className="ml-2 bg-red-500/10 text-red-600">Block/Unblock User Withdrawals</Badge>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Review user performance metrics and control their withdrawal access. Click the button to toggle withdrawal permission.
+            </p>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="pb-3 text-left text-xs font-medium text-muted-foreground">User</th>
+                    <th className="pb-3 text-right text-xs font-medium text-muted-foreground">Total Invested</th>
+                    <th className="pb-3 text-right text-xs font-medium text-muted-foreground">Total Earned</th>
+                    <th className="pb-3 text-right text-xs font-medium text-muted-foreground">ROI %</th>
+                    <th className="pb-3 text-right text-xs font-medium text-muted-foreground">Days Active</th>
+                    <th className="pb-3 text-right text-xs font-medium text-muted-foreground">Team Size</th>
+                    <th className="pb-3 text-right text-xs font-medium text-muted-foreground">Team Generated</th>
+                    <th className="pb-3 text-right text-xs font-medium text-muted-foreground">Wallet Balance</th>
+                    <th className="pb-3 text-center text-xs font-medium text-muted-foreground">Withdrawal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userDetailedStats.map((user) => {
+                    const roi = user.totalInvested > 0 
+                      ? ((user.totalEarnings / user.totalInvested) * 100).toFixed(1)
+                      : "0.0"
+                    return (
+                      <tr key={user.userId} className="border-b border-border/50 hover:bg-secondary/30">
+                        <td className="py-3">
+                          <p className="font-medium text-foreground">{user.name || "Anonymous"}</p>
+                          <p className="text-xs text-muted-foreground">{user.email}</p>
+                        </td>
+                        <td className="py-3 text-right font-medium text-amber-500">${formatCurrency(user.totalInvested)}</td>
+                        <td className="py-3 text-right font-medium text-green-500">${formatCurrency(user.totalEarnings)}</td>
+                        <td className="py-3 text-right">
+                          <Badge 
+                            variant="outline" 
+                            className={
+                              parseFloat(roi) > 100 ? 'bg-red-500/10 text-red-600' : 
+                              parseFloat(roi) > 50 ? 'bg-amber-500/10 text-amber-600' : 
+                              'bg-emerald-500/10 text-emerald-600'
+                            }
+                          >
+                            {roi}%
+                          </Badge>
+                        </td>
+                        <td className="py-3 text-right text-foreground">{user.daysActive}d</td>
+                        <td className="py-3 text-right">
+                          <Badge variant="secondary" className="bg-violet-500/10 text-violet-600">
+                            {user.teamSize}
+                          </Badge>
+                        </td>
+                        <td className="py-3 text-right text-blue-500">${formatCurrency(user.teamGeneratedEarnings)}</td>
+                        <td className="py-3 text-right font-semibold">${formatCurrency(user.walletBalance)}</td>
+                        <td className="py-3 text-center">
+                          <WithdrawalToggle 
+                            userId={user.userId} 
+                            userName={user.name || user.email}
+                            isDisabled={user.withdrawalDisabled}
+                          />
+                        </td>
+                      </tr>
+                    )
+                  })}
+                  {userDetailedStats.length === 0 && (
+                    <tr>
+                      <td colSpan={9} className="py-8 text-center text-muted-foreground">No users yet</td>
                     </tr>
                   )}
                 </tbody>

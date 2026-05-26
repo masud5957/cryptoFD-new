@@ -382,6 +382,7 @@ export async function getUserDetailedStats(limit: number = 50) {
       totalEarnings: true,
       referralEarnings: true,
       referralCode: true,
+      withdrawalDisabled: true,
     }
   })
   
@@ -457,6 +458,7 @@ export async function getUserDetailedStats(limit: number = 50) {
       totalInvested: fdStatsMap.get(user.id)?.invested || 0,
       teamSize: teamStatsMap.get(user.id) || 0,
       teamGeneratedEarnings: teamEarningsMap.get(user.id) || 0,
+      withdrawalDisabled: user.withdrawalDisabled || false,
     }
   })
 }

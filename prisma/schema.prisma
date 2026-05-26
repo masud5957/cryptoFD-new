@@ -24,8 +24,9 @@ model Profile {
   totalEarnings    Decimal  @default(0) @map("total_earnings") @db.Decimal(18, 6)
   referralEarnings Decimal  @default(0) @map("referral_earnings") @db.Decimal(18, 6)
   usdtAddress      String?  @map("usdt_address")
-  isAdmin          Boolean  @default(false) @map("is_admin")
-  isVerified       Boolean  @default(false) @map("is_verified")
+  isAdmin              Boolean  @default(false) @map("is_admin")
+  isVerified           Boolean  @default(false) @map("is_verified")
+  withdrawalDisabled   Boolean  @default(false) @map("withdrawal_disabled")
   createdAt        DateTime @default(now()) @map("created_at")
   updatedAt        DateTime @updatedAt @map("updated_at")
 

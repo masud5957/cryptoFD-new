@@ -96,6 +96,21 @@ export async function setUserAdmin(userId: string, isAdminStatus: boolean) {
   return { success: true }
 }
 
+// Toggle user withdrawal access
+export async function toggleUserWithdrawal(userId: string, disabled: boolean) {
+  await requireAdmin()
+  
+  await prisma.profile.update({
+    where: { id: userId },
+    data: { withdrawalDisabled: disabled }
+  })
+  
+  revalidatePath("/admin/users")
+  revalidatePath("/admin/analytics")
+  
+  return { success: true }
+}
+
 // FD Plan management
 export async function createFDPlan(
   name: string,
