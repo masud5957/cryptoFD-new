@@ -12,14 +12,14 @@ const USDT_ABI = [
 ];
 
 export async function sweep(task: any): Promise<string> {
-  console.log(`[SweepService] Sweeping ${task.amount} USDT from index ${task.derivation_index}`);
+  console.log(`[SweepService] Sweeping ${task.amount} USDT from index ${task.derivationIndex}`);
 
   // Derive wallet from mnemonic using ethers v6 correct syntax
   // Pass derivation path as 3rd argument to fromPhrase
   const derivedWallet = HDNodeWallet.fromPhrase(
     CONFIG.mnemonic,
     undefined, // no password
-    `m/44'/60'/0'/0/${task.derivation_index}` // BIP44 path
+    `m/44'/60'/0'/0/${task.derivationIndex}` // BIP44 path
   );
   const wallet = derivedWallet.connect(provider);
 

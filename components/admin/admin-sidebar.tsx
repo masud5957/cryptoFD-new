@@ -20,8 +20,8 @@ const navigation = [
   { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
   { name: "Users", href: "/admin/users", icon: Users },
   { name: "All Transactions", href: "/admin/transactions", icon: Receipt },
-  { name: "Pending Deposits", href: "/admin/deposits", icon: ArrowDownToLine },
-  { name: "Pending Withdrawals", href: "/admin/withdrawals", icon: ArrowUpFromLine },
+  { name: "Deposit History", href: "/admin/deposits", icon: ArrowDownToLine },
+  { name: "Withdrawal History", href: "/admin/withdrawals", icon: ArrowUpFromLine },
   { name: "Fixed Deposits", href: "/admin/fds", icon: Layers },
   { name: "FD Plans", href: "/admin/plans", icon: Settings },
 ]

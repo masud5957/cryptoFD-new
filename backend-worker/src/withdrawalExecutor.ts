@@ -74,15 +74,15 @@ export async function processWithdrawals() {
             },
           });
 
-          // Create transaction record
+          // Create completed withdrawal transaction record
           await prisma.transaction.create({
             data: {
               userId: withdrawal.userId,
               type: "withdrawal",
-              amount: Number(withdrawal.amount),
+              amount: -Number(withdrawal.amount), // Negative for withdrawal
               status: "completed",
               txHash: tx.hash,
-              description: `Withdrawal to ${withdrawal.toAddress}`,
+              description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
             },
           });
 

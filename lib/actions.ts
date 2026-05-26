@@ -174,24 +174,13 @@ export async function requestWithdrawal(amount: number, address: string) {
         }
       })
       
-      // Create withdrawal request
+      // Create withdrawal request (worker will process and create the transaction)
       await tx.withdrawalRequest.create({
         data: {
           userId: user.id,
           amount,
           toAddress: address,
           status: "pending",
-        }
-      })
-
-      // Create pending withdrawal transaction
-      await tx.transaction.create({
-        data: {
-          userId: user.id,
-          type: "withdrawal",
-          amount: -amount,
-          status: "pending",
-          description: `Withdrawal to ${address.slice(0, 10)}...${address.slice(-6)}`,
         }
       })
     })

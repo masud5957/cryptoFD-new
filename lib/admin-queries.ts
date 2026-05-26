@@ -306,3 +306,11 @@ export async function getReferralStats() {
     usersWithReferrals: usersWithReferrals.length
   }
 }
+
+// Get all withdrawal requests
+export async function getWithdrawalRequests() {
+  const requests = await prisma.withdrawalRequest.findMany({
+    orderBy: { createdAt: "desc" }
+  })
+  return requests
+}
