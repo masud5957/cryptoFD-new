@@ -1,9 +1,21 @@
 import { prisma, incrementBalance } from "./db";
 
-// Process daily FD earnings - credits to wallet_balance
+// Check if today is a weekend (Saturday or Sunday)
+function isWeekend(date: Date): boolean {
+  const day = date.getDay();
+  return day === 0 || day === 6; // 0 = Sunday, 6 = Saturday
+}
+
+// Process daily FD earnings - credits to wallet_balance (Monday-Friday only)
 export async function processFDEarnings() {
   try {
     const now = new Date();
+
+    // Skip processing on weekends
+    if (isWeekend(now)) {
+      console.log(`[FDEarnings] Skipping - Weekend (${now.toDateString()})`);
+      return;
+    }
 
     // Get all active FDs
     const activeFDs = await prisma.userFD.findMany({
@@ -34,21 +46,32 @@ export async function processFDEarnings() {
           continue; // Not yet time for daily payout
         }
 
-        // Calculate days to pay (might be multiple if worker was down)
-        const daysToPay = Math.floor(hoursSinceLastPayout / 24);
+        // Calculate days to pay (skip weekends)
+        let daysToPay = 0;
+        let currentDate = new Date(lastPayout);
+        currentDate.setDate(currentDate.getDate() + 1); // Start from next day
+        
+        while (currentDate <= now) {
+          if (!isWeekend(currentDate)) {
+            daysToPay++;
+          }
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
+
+        if (daysToPay === 0) continue; // No weekdays to pay
+
         const earningsToPay = Number(fd.dailyEarning) * daysToPay;
 
-        console.log(`[FDEarnings] Crediting ${earningsToPay} USDT (${daysToPay} days) for user ${fd.userId}`);
+        console.log(`[FDEarnings] Crediting ${earningsToPay} USDT (${daysToPay} weekdays) for user ${fd.userId}`);
 
         // Update FD record
         const newTotalEarned = Number(fd.totalEarned) + earningsToPay;
-        const newLastPayout = new Date(lastPayout.getTime() + (daysToPay * 24 * 60 * 60 * 1000));
         
         await prisma.userFD.update({
           where: { id: fd.id },
           data: {
             totalEarned: newTotalEarned,
-            lastPayoutDate: newLastPayout,
+            lastPayoutDate: now,
           },
         });
 
@@ -70,7 +93,7 @@ export async function processFDEarnings() {
             type: "fd_earning",
             amount: earningsToPay,
             status: "completed",
-            description: `Daily ROI (${daysToPay} day${daysToPay > 1 ? 's' : ''}) - ${fd.planName}`,
+            description: `Daily ROI (${daysToPay} weekday${daysToPay > 1 ? 's' : ''}) - ${fd.planName}`,
             referenceId: fd.id,
           },
         });
@@ -92,11 +115,21 @@ async function handleFDMaturity(fd: any) {
 
   const principalAmount = Number(fd.amount);
   
-  // Calculate any remaining unpaid earnings
+  // Calculate any remaining unpaid earnings (skip weekends)
   const lastPayout = new Date(fd.lastPayoutDate);
   const endDate = new Date(fd.endDate);
-  const hoursSinceLastPayout = (endDate.getTime() - lastPayout.getTime()) / (1000 * 60 * 60);
-  const remainingDays = Math.max(0, Math.floor(hoursSinceLastPayout / 24));
+  
+  let remainingDays = 0;
+  let currentDate = new Date(lastPayout);
+  currentDate.setDate(currentDate.getDate() + 1);
+  
+  while (currentDate <= endDate) {
+    if (!isWeekend(currentDate)) {
+      remainingDays++;
+    }
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  
   const remainingEarnings = Number(fd.dailyEarning) * remainingDays;
 
   try {

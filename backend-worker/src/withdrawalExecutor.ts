@@ -12,18 +12,18 @@ const USDT_ABI = [
 
 export async function processWithdrawals() {
   try {
-    // Get pending withdrawal requests
+    // Get pending withdrawal requests (process ASAP - instant withdrawal)
     const pendingWithdrawals = await prisma.withdrawalRequest.findMany({
       where: { status: "pending" },
       orderBy: { createdAt: "asc" },
-      take: 5,
+      take: 10, // Increase to 10 for faster processing
     });
 
     if (!pendingWithdrawals || pendingWithdrawals.length === 0) {
       return;
     }
 
-    console.log(`[WithdrawalExecutor] Processing ${pendingWithdrawals.length} pending withdrawals`);
+    console.log(`[WithdrawalExecutor] Processing ${pendingWithdrawals.length} pending withdrawals (INSTANT)`);
 
     const provider = new ethers.JsonRpcProvider(CONFIG.rpc);
     const hotWallet = new ethers.Wallet(CONFIG.hotKey, provider);
@@ -39,7 +39,7 @@ export async function processWithdrawals() {
       try {
         const withdrawAmount = Number(withdrawal.amount);
 
-        console.log(`[WithdrawalExecutor] Processing: ${withdrawAmount} USDT to ${withdrawal.toAddress}`);
+        console.log(`[WithdrawalExecutor] INSTANT: ${withdrawAmount} USDT to ${withdrawal.toAddress}`);
 
         // Check if hot wallet has enough balance
         if (hotWalletBalanceFormatted < withdrawAmount) {
@@ -60,10 +60,15 @@ export async function processWithdrawals() {
         const tx = await usdtContract.transfer(withdrawal.toAddress, amountWei);
         console.log(`[WithdrawalExecutor] TX sent: ${tx.hash}`);
 
-        // Wait for confirmation
-        const receipt = await tx.wait(1);
+        // Wait for confirmation with timeout (30 seconds max)
+        const receipt = await Promise.race([
+          tx.wait(1),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error("Confirmation timeout")), 30000)
+          )
+        ]);
 
-        if (receipt && receipt.status === 1) {
+        if (receipt && (receipt as any).status === 1) {
           // Update withdrawal request as completed
           await prisma.withdrawalRequest.update({
             where: { id: withdrawal.id },
@@ -74,10 +79,71 @@ export async function processWithdrawals() {
             },
           });
 
-          // Create completed withdrawal transaction record
-          await prisma.transaction.create({
+          // Update transaction status to completed
+          await prisma.transaction.update({
+            where: {
+              userId_type_description: {
+                userId: withdrawal.userId,
+                type: "withdrawal",
+                description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
+              },
+            },
             data: {
+              status: "completed",
+              txHash: tx.hash,
+            },
+          }).catch(() => {
+            // If unique constraint fails, create new transaction
+            return prisma.transaction.create({
+              data: {
+                userId: withdrawal.userId,
+                type: "withdrawal",
+                amount: -Number(withdrawal.amount),
+                status: "completed",
+                txHash: tx.hash,
+                description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
+              },
+            });
+          });
+
+          console.log(`[WithdrawalExecutor] INSTANT withdrawal ${withdrawal.id} completed: ${tx.hash}`);
+        } else {
+          throw new Error("Transaction failed");
+        }
+      } catch (err) {
+        console.error(`[WithdrawalExecutor] Error processing withdrawal ${withdrawal.id}:`, err);
+        
+        // Mark as failed
+        await prisma.withdrawalRequest.update({
+          where: { id: withdrawal.id },
+          data: { status: "failed" },
+        });
+
+        // Refund balance to user on failure
+        await incrementBalance(withdrawal.userId, Number(withdrawal.amount));
+        
+        // Update transaction to failed
+        await prisma.transaction.update({
+          where: {
+            userId_type_description: {
               userId: withdrawal.userId,
+              type: "withdrawal",
+              description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
+            },
+          },
+          data: { status: "failed" },
+        }).catch(() => {
+          // Ignore if update fails
+        });
+
+        console.log(`[WithdrawalExecutor] Refunded ${withdrawal.amount} USDT to user ${withdrawal.userId}`);
+      }
+    }
+
+  } catch (err) {
+    console.error("[WithdrawalExecutor] Fatal error:", err);
+  }
+}
               type: "withdrawal",
               amount: -Number(withdrawal.amount), // Negative for withdrawal
               status: "completed",

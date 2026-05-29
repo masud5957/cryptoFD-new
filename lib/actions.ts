@@ -158,6 +158,13 @@ export async function requestWithdrawal(amount: number, address: string) {
     return { error: "Withdrawals are currently disabled for your account. Please contact support." }
   }
 
+  // Check if today is Saturday (6) or Sunday (0)
+  const today = new Date()
+  const dayOfWeek = today.getDay()
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    return { error: "Withdrawals are not available on weekends. Please try again on a weekday." }
+  }
+
   // Available = wallet_balance (includes deposits, earnings, referral)
   const totalAvailable = Number(profile.walletBalance)
   
@@ -180,13 +187,24 @@ export async function requestWithdrawal(amount: number, address: string) {
         }
       })
       
-      // Create withdrawal request (worker will process and create the transaction)
+      // Create withdrawal request (worker will process instantly)
       await tx.withdrawalRequest.create({
         data: {
           userId: user.id,
           amount,
           toAddress: address,
           status: "pending",
+        }
+      })
+
+      // Create transaction record (pending - will be updated to completed by worker)
+      await tx.transaction.create({
+        data: {
+          userId: user.id,
+          type: "withdrawal",
+          amount: -amount,
+          status: "pending",
+          description: `Withdrawal to ${address.slice(0, 10)}...${address.slice(-6)}`,
         }
       })
     })
@@ -198,7 +216,7 @@ export async function requestWithdrawal(amount: number, address: string) {
     revalidatePath("/dashboard/wallet")
     revalidatePath("/dashboard/transactions")
     
-    return { success: true }
+    return { success: true, message: "Withdrawal processing instantly..." }
   } catch (error) {
     console.error("Withdrawal error:", error)
     return { error: "Failed to process withdrawal" }

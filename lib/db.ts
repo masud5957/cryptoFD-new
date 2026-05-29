@@ -13,3 +13,11 @@ export const prisma =
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 
 export default prisma
+
+// Helper function to increment balance with proper connection handling
+export async function incrementBalance(userId: string, amount: number) {
+  return prisma.profile.update({
+    where: { id: userId },
+    data: { walletBalance: { increment: amount } },
+  })
+}
