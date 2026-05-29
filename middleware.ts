@@ -7,6 +7,7 @@ const JWT_SECRET = new TextEncoder().encode(
 
 const protectedRoutes = ["/dashboard", "/admin"]
 const authRoutes = ["/auth/login", "/auth/sign-up", "/auth/forgot-password"]
+const publicRoutes = ["/admin-login"] // Admin login page is public (has its own auth)
 
 async function verifyToken(token: string): Promise<boolean> {
   try {
@@ -21,7 +22,11 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const token = request.cookies.get("auth_token")?.value
 
-  console.log("[v0] Middleware:", pathname, "Token exists:", !!token)
+  // Skip middleware for public routes (like admin-login)
+  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route))
+  if (isPublicRoute) {
+    return NextResponse.next()
+  }
 
   // Check if accessing protected route
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
@@ -29,13 +34,11 @@ export async function middleware(request: NextRequest) {
 
   if (isProtectedRoute) {
     if (!token) {
-      console.log("[v0] No token, redirecting to login")
       // Redirect to login if no token
       return NextResponse.redirect(new URL("/auth/login", request.url))
     }
 
     const isValid = await verifyToken(token)
-    console.log("[v0] Token valid:", isValid)
     if (!isValid) {
       // Clear invalid token and redirect to login
       const response = NextResponse.redirect(new URL("/auth/login", request.url))
@@ -48,7 +51,6 @@ export async function middleware(request: NextRequest) {
   if (isAuthRoute && token) {
     const isValid = await verifyToken(token)
     if (isValid) {
-      console.log("[v0] Valid token on auth page, redirecting to dashboard")
       return NextResponse.redirect(new URL("/dashboard", request.url))
     }
   }
