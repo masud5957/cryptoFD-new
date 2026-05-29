@@ -309,15 +309,16 @@ export function WalletForm({ availableBalance, savedAddress }: WalletFormProps) 
               </div>
 
               {/* Warning */}
-              <div className="flex items-start gap-2 rounded-xl bg-yellow-500/10 p-4">
-                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-yellow-500" />
+              <div className="flex items-start gap-2 rounded-xl bg-blue-500/10 p-4 border border-blue-500/20">
+                <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-blue-500" />
                 <div className="text-sm text-muted-foreground">
-                  <p className="font-medium text-yellow-500">Important:</p>
-                  <ul className="mt-1 list-inside list-disc space-y-1">
+                  <p className="font-medium text-blue-500">Withdrawal Instructions:</p>
+                  <ul className="mt-2 list-inside list-disc space-y-1.5">
+                    <li><span className="font-semibold">Minimum Deposit:</span> 50 USDT</li>
+                    <li><span className="font-semibold">Instant Withdraw:</span> Processed within seconds</li>
                     <li>Minimum withdrawal: 50 USDT</li>
-                    <li>Withdrawals are processed instantly (within seconds)</li>
-                    <li>No withdrawals available on weekends (Sat-Sun)</li>
-                    <li>Double-check your wallet address</li>
+                    <li>No withdrawals available on weekends (Saturday-Sunday)</li>
+                    <li>Double-check your wallet address before confirming</li>
                   </ul>
                 </div>
               </div>
