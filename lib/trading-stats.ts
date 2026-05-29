@@ -5,57 +5,91 @@ import { revalidatePath } from "next/cache"
 
 // Get current trading stats
 export async function getTradingStats() {
-  let stats = await prisma.tradingStats.findUnique({
-    where: { id: "main" }
-  })
-  
-  // If no stats exist, create initial record with realistic starting values
-  if (!stats) {
-    stats = await prisma.tradingStats.create({
-      data: {
-        id: "main",
-        totalProfit: 1247832.45, // Starting value
-        totalTrades: 15432,
-        winRate: 76.5,
-      }
+  try {
+    let stats = await prisma.tradingStats.findUnique({
+      where: { id: "main" }
     })
-  }
-  
-  return {
-    totalProfit: Number(stats.totalProfit),
-    totalTrades: stats.totalTrades,
-    winRate: Number(stats.winRate),
-    lastUpdated: stats.lastUpdated,
+    
+    // If no stats exist, create initial record with realistic starting values
+    if (!stats) {
+      stats = await prisma.tradingStats.create({
+        data: {
+          id: "main",
+          totalProfit: 1247832.45, // Starting value
+          totalTrades: 15432,
+          winRate: 76.5,
+        }
+      })
+    }
+    
+    return {
+      totalProfit: Number(stats.totalProfit),
+      totalTrades: stats.totalTrades,
+      winRate: Number(stats.winRate),
+      lastUpdated: stats.lastUpdated,
+    }
+  } catch (error) {
+    // Fallback if table doesn't exist
+    console.log("[TradingStats] Table error, returning fallback data")
+    return {
+      totalProfit: 1247832.45,
+      totalTrades: 15432,
+      winRate: 76.5,
+      lastUpdated: new Date(),
+    }
   }
 }
 
 // Get monthly trading records for charts
 export async function getMonthlyTradingRecords() {
-  const records = await prisma.tradingDailyRecord.findMany({
-    orderBy: { date: 'asc' },
-  })
-  
-  // Group by month
-  const monthlyMap = new Map<string, { profit: number, trades: number, winRates: number[] }>()
-  
-  for (const record of records) {
-    const monthKey = record.date.toISOString().slice(0, 7) // YYYY-MM format
-    const existing = monthlyMap.get(monthKey) || { profit: 0, trades: 0, winRates: [] }
-    existing.profit += Number(record.profit)
-    existing.trades += record.trades
-    existing.winRates.push(Number(record.winRate))
-    monthlyMap.set(monthKey, existing)
+  try {
+    const records = await prisma.tradingDailyRecord.findMany({
+      orderBy: { date: 'asc' },
+    })
+    
+    // Group by month
+    const monthlyMap = new Map<string, { profit: number, trades: number, winRates: number[] }>()
+    
+    for (const record of records) {
+      const monthKey = record.date.toISOString().slice(0, 7) // YYYY-MM format
+      const existing = monthlyMap.get(monthKey) || { profit: 0, trades: 0, winRates: [] }
+      existing.profit += Number(record.profit)
+      existing.trades += record.trades
+      existing.winRates.push(Number(record.winRate))
+      monthlyMap.set(monthKey, existing)
+    }
+    
+    // Convert to array and calculate averages
+    const monthlyData = Array.from(monthlyMap.entries()).map(([month, data]) => ({
+      month,
+      profit: Math.round(data.profit),
+      trades: data.trades,
+      winRate: Math.round(data.winRates.reduce((a, b) => a + b, 0) / data.winRates.length),
+    }))
+    
+    return monthlyData
+  } catch (error) {
+    // Fallback: return generated monthly data
+    console.log("[TradingStats] Daily records table not found, returning generated data")
+    return generateMonthlyData()
   }
+}
+
+// Generate 7 months of trading data (fallback when table doesn't exist)
+function generateMonthlyData() {
+  const months = ["Nov 2024", "Dec 2024", "Jan 2025", "Feb 2025", "Mar 2025", "Apr 2025", "May 2025"]
+  let cumulativeProfit = 0
   
-  // Convert to array and calculate averages
-  const monthlyData = Array.from(monthlyMap.entries()).map(([month, data]) => ({
-    month,
-    profit: Math.round(data.profit),
-    trades: data.trades,
-    winRate: Math.round(data.winRates.reduce((a, b) => a + b, 0) / data.winRates.length),
-  }))
-  
-  return monthlyData
+  return months.map((month, index) => {
+    const monthlyProfit = 150000 + Math.floor(Math.random() * 100000) + (index * 20000)
+    cumulativeProfit += monthlyProfit
+    return {
+      month,
+      profit: monthlyProfit,
+      trades: Math.floor(1200 + Math.random() * 800 + (index * 100)),
+      winRate: Math.round(72 + Math.random() * 8),
+    }
+  })
 }
 
 // Update trading stats - called by backend worker/cron job

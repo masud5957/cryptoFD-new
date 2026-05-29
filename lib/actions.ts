@@ -172,8 +172,8 @@ export async function requestWithdrawal(amount: number, address: string) {
     return { error: "Insufficient balance" }
   }
   
-  if (amount < 50) {
-    return { error: "Minimum withdrawal is 50 USDT" }
+  if (amount < 10) {
+    return { error: "Minimum withdrawal is 10 USDT" }
   }
   
   try {

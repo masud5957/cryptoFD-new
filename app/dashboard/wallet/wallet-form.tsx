@@ -82,7 +82,7 @@ export function WalletForm({ availableBalance, savedAddress }: WalletFormProps) 
 
   const handleWithdraw = async () => {
     const amount = parseFloat(withdrawAmount)
-    if (!withdrawAddress || !amount || amount < 50) return
+    if (!withdrawAddress || !amount || amount < 10) return
     
     setError(null)
     setIsLoading(true)
@@ -316,7 +316,7 @@ export function WalletForm({ availableBalance, savedAddress }: WalletFormProps) 
                   <ul className="mt-2 list-inside list-disc space-y-1.5">
                     <li><span className="font-semibold">Minimum Deposit:</span> 50 USDT</li>
                     <li><span className="font-semibold">Instant Withdraw:</span> Processed within seconds</li>
-                    <li>Minimum withdrawal: 50 USDT</li>
+                    <li>Minimum withdrawal: 10 USDT</li>
                     <li>No withdrawals available on weekends (Saturday-Sunday)</li>
                     <li>Double-check your wallet address before confirming</li>
                   </ul>
@@ -325,7 +325,7 @@ export function WalletForm({ availableBalance, savedAddress }: WalletFormProps) 
 
               <Button 
                 className="h-12 w-full text-base" 
-                disabled={!withdrawAddress || !withdrawAmount || parseFloat(withdrawAmount) < 50 || parseFloat(withdrawAmount) > balance || isLoading}
+                disabled={!withdrawAddress || !withdrawAmount || parseFloat(withdrawAmount) < 10 || parseFloat(withdrawAmount) > balance || isLoading}
                 onClick={handleWithdraw}
               >
                 {isLoading ? (
