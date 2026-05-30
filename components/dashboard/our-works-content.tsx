@@ -175,22 +175,32 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit }: O
     setTradingActivity(generateTradingActivity())
   }, [])
 
-  // Simulate live updates with small increments
+  // Fetch real data from database on mount and refresh every 10 seconds
   useEffect(() => {
-    if (!isHydrated) return
-    
-    const interval = setInterval(() => {
-      setTradingActivity(generateTradingActivity())
-      setLiveStats(prev => ({
-        totalProfit: prev.totalProfit + (Math.random() * 50 + 10), // Small increment for live feel
-        todayProfit: prev.todayProfit + (Math.random() * 20 + 5),
-        activeTrades: Math.floor(20 + Math.random() * 15),
-        winRate: 74 + Math.random() * 5,
-      }))
-    }, 5000)
+    const fetchTradingData = async () => {
+      try {
+        const response = await fetch('/api/admin/trading-stats')
+        const data = await response.json()
+        
+        setLiveStats(prev => ({
+          totalProfit: data.totalProfit,
+          todayProfit: prev.todayProfit,
+          activeTrades: prev.activeTrades,
+          winRate: data.winRate,
+        }))
+      } catch (error) {
+        console.error("Failed to fetch trading stats:", error)
+      }
+    }
+
+    // Fetch immediately on mount
+    fetchTradingData()
+
+    // Then refresh every 10 seconds
+    const interval = setInterval(fetchTradingData, 10000)
     
     return () => clearInterval(interval)
-  }, [isHydrated])
+  }, [])
 
   return (
     <div className="space-y-6">
