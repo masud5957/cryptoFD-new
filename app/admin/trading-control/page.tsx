@@ -25,7 +25,7 @@ export default function TradingControlPage() {
   // Activities state
   const [activities, setActivities] = useState<any[]>([])
   const [addingActivity, setAddingActivity] = useState(false)
-  const [newActivity, setNewActivity] = useState({ crypto: "", action: "", amount: 0, profit: null as number | null })
+  const [newActivity, setNewActivity] = useState({ crypto: "", action: "", amount: 0, profit: "" as string | number })
 
   useEffect(() => {
     fetchStats()
@@ -423,7 +423,7 @@ export default function TradingControlPage() {
                   type="number" 
                   placeholder="Profit (optional)"
                   value={newActivity.profit}
-                  onChange={(e) => setNewActivity({ ...newActivity, profit: e.target.value ? parseFloat(e.target.value) : null })}
+                  onChange={(e) => setNewActivity({ ...newActivity, profit: e.target.value })}
                   className="px-3 py-2 rounded-lg bg-background border border-border text-foreground"
                 />
                 <Button 

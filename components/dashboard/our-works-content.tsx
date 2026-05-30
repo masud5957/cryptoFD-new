@@ -142,12 +142,17 @@ const portfolioAllocation = [
 
 export function OurWorksContent({ initialStats, monthlyRecords, todayProfit, tradingActivities = [] }: OurWorksContentProps) {
   const [cryptoData] = useState(() => generateCryptoData({ btc: 68000, eth: 3200, bnb: 580, sol: 120 }))
-  const [tradingActivity, setTradingActivity] = useState(() => 
-    tradingActivities.length > 0 ? tradingActivities : initialTradingActivity
-  )
+  const [tradingActivity, setTradingActivity] = useState(initialTradingActivity)
   const [isHydrated, setIsHydrated] = useState(false)
   
-  // Display exact database values - NO auto-increment
+  // Only format numbers on client side to avoid hydration mismatch
+  const formattedStats = {
+    totalProfit: isHydrated ? initialStats.totalProfit.toLocaleString(undefined, { maximumFractionDigits: 0 }) : "0",
+    todayProfit: isHydrated ? todayProfit.profit.toLocaleString(undefined, { maximumFractionDigits: 0 }) : "0",
+    totalTrades: isHydrated ? initialStats.totalTrades.toLocaleString() : "0",
+    winRate: isHydrated ? initialStats.winRate.toFixed(1) : "0.0",
+  }
+
   const [liveStats] = useState({
     totalProfit: initialStats.totalProfit,
     todayProfit: todayProfit.profit,
@@ -174,7 +179,7 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit, tra
   // Hydrate and regenerate trading activity on mount only
   useEffect(() => {
     setIsHydrated(true)
-    setTradingActivity(generateTradingActivity())
+    setTradingActivity(tradingActivities.length > 0 ? tradingActivities : generateTradingActivity())
   }, [])
 
   return (
@@ -193,7 +198,7 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit, tra
           <CardHeader className="pb-2">
             <CardDescription>Total Trading Profit</CardDescription>
             <CardTitle className="text-2xl text-emerald-500">
-              ${liveStats.totalProfit.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              ${formattedStats.totalProfit}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -208,7 +213,7 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit, tra
           <CardHeader className="pb-2">
             <CardDescription>Today&apos;s Profit</CardDescription>
             <CardTitle className="text-2xl text-amber-500">
-              ${liveStats.todayProfit.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              ${formattedStats.todayProfit}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -228,7 +233,7 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit, tra
           <CardHeader className="pb-2">
             <CardDescription>Total Trades</CardDescription>
             <CardTitle className="text-2xl text-amber-600 dark:text-amber-400">
-              {initialStats.totalTrades.toLocaleString()}
+              {formattedStats.totalTrades}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -243,7 +248,7 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit, tra
           <CardHeader className="pb-2">
             <CardDescription>Win Rate</CardDescription>
             <CardTitle className="text-2xl text-blue-500">
-              {liveStats.winRate.toFixed(1)}%
+              {formattedStats.winRate}%
             </CardTitle>
           </CardHeader>
           <CardContent>
