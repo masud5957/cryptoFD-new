@@ -6,7 +6,7 @@ export const metadata = {
   description: "See how CryptoFD generates returns through cryptocurrency trading",
 }
 
-export const revalidate = 60 // Revalidate every 60 seconds
+export const revalidate = 30 // Revalidate every 30 seconds to show admin updates quickly
 
 export default async function OurWorksPage() {
   const [stats, monthlyRecords, todayProfit] = await Promise.all([

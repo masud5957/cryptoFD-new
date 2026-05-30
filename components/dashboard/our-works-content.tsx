@@ -145,8 +145,8 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit }: O
   const [tradingActivity, setTradingActivity] = useState(initialTradingActivity)
   const [isHydrated, setIsHydrated] = useState(false)
   
-  // Use database values for stats with small client-side increments for "live" feel
-  const [liveStats, setLiveStats] = useState({
+  // Display exact database values - NO auto-increment
+  const [liveStats] = useState({
     totalProfit: initialStats.totalProfit,
     todayProfit: todayProfit.profit,
     activeTrades: Math.floor(20 + Math.random() * 10),
@@ -169,28 +169,11 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit }: O
       })
     : generateFallbackMonthlyData()
 
-  // Hydrate with live data after mount
+  // Hydrate and regenerate trading activity on mount only
   useEffect(() => {
     setIsHydrated(true)
     setTradingActivity(generateTradingActivity())
   }, [])
-
-  // Simulate live updates with small increments
-  useEffect(() => {
-    if (!isHydrated) return
-    
-    const interval = setInterval(() => {
-      setTradingActivity(generateTradingActivity())
-      setLiveStats(prev => ({
-        totalProfit: prev.totalProfit + (Math.random() * 50 + 10), // Small increment for live feel
-        todayProfit: prev.todayProfit + (Math.random() * 20 + 5),
-        activeTrades: Math.floor(20 + Math.random() * 15),
-        winRate: 74 + Math.random() * 5,
-      }))
-    }, 5000)
-    
-    return () => clearInterval(interval)
-  }, [isHydrated])
 
   return (
     <div className="space-y-6">
