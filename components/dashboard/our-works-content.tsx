@@ -58,6 +58,14 @@ interface OurWorksContentProps {
   todayProfit: TodayProfit
 }
 
+// Format currency consistently (server and client match)
+function formatCurrency(num: number): string {
+  return new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(num)
+}
+
 // Seeded random for consistent data generation
 function seededRandom(seed: number) {
   const x = Math.sin(seed) * 10000
@@ -218,7 +226,7 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit }: O
           <CardHeader className="pb-2">
             <CardDescription>Total Trading Profit</CardDescription>
             <CardTitle className="text-2xl text-emerald-500">
-              ${liveStats.totalProfit.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              ${formatCurrency(liveStats.totalProfit)}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -233,7 +241,7 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit }: O
           <CardHeader className="pb-2">
             <CardDescription>Today&apos;s Profit</CardDescription>
             <CardTitle className="text-2xl text-amber-500">
-              ${liveStats.todayProfit.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              ${formatCurrency(liveStats.todayProfit)}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -253,7 +261,7 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit }: O
           <CardHeader className="pb-2">
             <CardDescription>Total Trades</CardDescription>
             <CardTitle className="text-2xl text-amber-600 dark:text-amber-400">
-              {initialStats.totalTrades.toLocaleString()}
+              {formatCurrency(initialStats.totalTrades)}
             </CardTitle>
           </CardHeader>
           <CardContent>
