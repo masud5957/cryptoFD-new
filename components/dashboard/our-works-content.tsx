@@ -140,9 +140,11 @@ const portfolioAllocation = [
   { name: "Others", value: 10, color: "#6B7280" },
 ]
 
-export function OurWorksContent({ initialStats, monthlyRecords, todayProfit }: OurWorksContentProps) {
+export function OurWorksContent({ initialStats, monthlyRecords, todayProfit, tradingActivities = [] }: OurWorksContentProps) {
   const [cryptoData] = useState(() => generateCryptoData({ btc: 68000, eth: 3200, bnb: 580, sol: 120 }))
-  const [tradingActivity, setTradingActivity] = useState(initialTradingActivity)
+  const [tradingActivity, setTradingActivity] = useState(() => 
+    tradingActivities.length > 0 ? tradingActivities : initialTradingActivity
+  )
   const [isHydrated, setIsHydrated] = useState(false)
   
   // Display exact database values - NO auto-increment

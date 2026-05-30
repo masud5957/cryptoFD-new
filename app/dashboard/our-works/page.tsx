@@ -1,5 +1,5 @@
 import { OurWorksContent } from "@/components/dashboard/our-works-content"
-import { getTradingStats, getMonthlyTradingRecords, getTodayProfit } from "@/lib/trading-stats"
+import { getTradingStats, getMonthlyTradingRecords, getTodayProfit, getTradingActivities } from "@/lib/trading-stats"
 
 export const metadata = {
   title: "Our Works - CryptoFD",
@@ -9,10 +9,11 @@ export const metadata = {
 export const revalidate = 30 // Revalidate every 30 seconds to show admin updates quickly
 
 export default async function OurWorksPage() {
-  const [stats, monthlyRecords, todayProfit] = await Promise.all([
+  const [stats, monthlyRecords, todayProfit, activities] = await Promise.all([
     getTradingStats(),
     getMonthlyTradingRecords(),
     getTodayProfit(),
+    getTradingActivities(20),
   ])
   
   return (
@@ -20,6 +21,7 @@ export default async function OurWorksPage() {
       initialStats={stats}
       monthlyRecords={monthlyRecords}
       todayProfit={todayProfit}
+      tradingActivities={activities}
     />
   )
 }
