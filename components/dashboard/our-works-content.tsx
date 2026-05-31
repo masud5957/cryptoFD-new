@@ -148,7 +148,7 @@ const portfolioAllocation = [
   { name: "Ethereum", value: 28, color: "#627EEA" },
   { name: "BNB", value: 15, color: "#F3BA2F" },
   { name: "Solana", value: 12, color: "#9945FF" },
-  { name: "Others", value: 10, color: "#6B7280" },
+  { name: "Stablecoins", value: 10, color: "#6B7280" },
 ]
 
 export function OurWorksContent({ initialStats, monthlyRecords, todayProfit }: OurWorksContentProps) {

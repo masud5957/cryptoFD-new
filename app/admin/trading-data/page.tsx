@@ -319,8 +319,8 @@ export default function TradingDataManagement() {
                       <option value="Bitcoin">Bitcoin</option>
                       <option value="Ethereum">Ethereum</option>
                       <option value="BNB">BNB</option>
+                      <option value="Solana">Solana</option>
                       <option value="Stablecoins">Stablecoins</option>
-                      <option value="Altcoins">Altcoins</option>
                     </select>
                   </div>
                   <div>

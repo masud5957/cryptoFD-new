@@ -23,15 +23,28 @@ export async function POST(request: Request) {
 
       const dailyRecords = []
       for (const month of months) {
-        for (let day = 1; day <= 20; day++) {
+        // Generate 30 days per month with 200k-400k daily profit
+        const dailyProfitMin = 200000
+        const dailyProfitMax = 400000
+        const monthlyTradesMin = 3000
+        const monthlyTradesMax = 6000
+        const totalMonthlyTrades = Math.floor(Math.random() * (monthlyTradesMax - monthlyTradesMin) + monthlyTradesMin)
+        
+        for (let day = 1; day <= 30; day++) {
           const date = new Date(month)
           date.setDate(day)
           
+          // Daily profit between 200k-400k
+          const dailyProfit = Math.round((Math.random() * (dailyProfitMax - dailyProfitMin) + dailyProfitMin) * 100) / 100
+          
+          // Distribute trades across 30 days
+          const tradesForDay = Math.floor(totalMonthlyTrades / 30)
+          
           dailyRecords.push({
             date: date,
-            profit: Math.round((Math.random() * 150000 + 50000) * 100) / 100,
-            trades: Math.floor(Math.random() * 100 + 50),
-            winRate: Math.round((70 + Math.random() * 15) * 10) / 10,
+            profit: dailyProfit,
+            trades: tradesForDay,
+            winRate: Math.round((72 + Math.random() * 10) * 10) / 10, // 72-82% win rate
           })
         }
       }
@@ -45,12 +58,13 @@ export async function POST(request: Request) {
         })
       }
 
-      // Create portfolio allocation
+      // Create portfolio allocation with corrected distribution
       const portfolioData = [
         { asset: "Bitcoin", percentage: 35, value: 1050000 },
-        { asset: "Ethereum", percentage: 25, value: 750000 },
-        { asset: "Stablecoins", percentage: 20, value: 600000 },
-        { asset: "Other Altcoins", percentage: 20, value: 600000 },
+        { asset: "Ethereum", percentage: 28, value: 840000 },
+        { asset: "BNB", percentage: 15, value: 450000 },
+        { asset: "Solana", percentage: 12, value: 360000 },
+        { asset: "Stablecoins", percentage: 10, value: 300000 },
       ]
 
       for (const p of portfolioData) {
