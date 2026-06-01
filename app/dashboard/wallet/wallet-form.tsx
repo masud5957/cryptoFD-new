@@ -295,14 +295,18 @@ export function WalletForm({ availableBalance, savedAddress }: WalletFormProps) 
               {/* Fee Info */}
               <div className="rounded-xl bg-secondary/30 p-4">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Network Fee</span>
-                  <span className="text-foreground">1 USDT</span>
+                  <span className="text-muted-foreground">Platform Fee (3%)</span>
+                  <span className="text-foreground">
+                    {withdrawAmount 
+                      ? `${(parseFloat(withdrawAmount) * 0.03).toFixed(2)} USDT` 
+                      : "0.00 USDT"}
+                  </span>
                 </div>
-                <div className="mt-2 flex items-center justify-between text-sm">
+                <div className="mt-2 flex items-center justify-between text-sm border-t border-border/30 pt-2">
                   <span className="text-muted-foreground">You Will Receive</span>
                   <span className="font-medium text-foreground">
                     {withdrawAmount 
-                      ? `${Math.max(0, parseFloat(withdrawAmount) - 1).toFixed(2)} USDT` 
+                      ? `${Math.max(0, parseFloat(withdrawAmount) * 0.97).toFixed(2)} USDT` 
                       : "0.00 USDT"}
                   </span>
                 </div>
