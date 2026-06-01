@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/db"
-import { requireAuthSession } from "@/lib/auth"
+import { requireAuth } from "@/lib/auth"
 
 export async function POST(request: Request) {
   try {
-    const session = await requireAuthSession()
+    const user = await requireAuth()
     const formData = await request.formData()
     const file = formData.get("photo") as File
 
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
 
     // Update user profile with photo
     const profile = await prisma.profile.update({
-      where: { email: session.user?.email! },
+      where: { id: user.id },
       data: {
         profilePhoto: dataUrl,
       },
@@ -49,10 +49,10 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    const session = await requireAuthSession()
+    const user = await requireAuth()
 
     const profile = await prisma.profile.findUnique({
-      where: { email: session.user?.email! },
+      where: { id: user.id },
       select: { profilePhoto: true },
     })
 
