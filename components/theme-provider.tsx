@@ -1,12 +1,13 @@
 'use client'
 
 import * as React from 'react'
+import dynamic from 'next/dynamic'
 import {
   ThemeProvider as NextThemesProvider,
   type ThemeProviderProps,
 } from 'next-themes'
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+function ThemeProviderInner({ children, ...props }: ThemeProviderProps) {
   return (
     <NextThemesProvider 
       {...props} 
@@ -20,3 +21,9 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
     </NextThemesProvider>
   )
 }
+
+// Dynamically import with ssr: false to prevent script injection
+export const ThemeProvider = dynamic(
+  () => Promise.resolve(ThemeProviderInner),
+  { ssr: false }
+)
