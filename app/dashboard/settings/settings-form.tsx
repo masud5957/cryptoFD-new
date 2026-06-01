@@ -103,9 +103,15 @@ export function SettingsForm({
       }
 
       const data = await response.json()
-      setPhotoPreview(data.photo)
+      // Set preview immediately from response
+      if (data.photo) {
+        setPhotoPreview(data.photo)
+      }
       setSuccess("Photo uploaded successfully!")
-      router.refresh()
+      // Refresh page after short delay to ensure database is updated
+      setTimeout(() => {
+        router.refresh()
+      }, 500)
       setTimeout(() => setSuccess(null), 5000)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to upload photo")
@@ -118,6 +124,8 @@ export function SettingsForm({
     const file = e.target.files?.[0]
     if (file) {
       handlePhotoUpload(file)
+      // Clear the input so the same file can be selected again
+      e.target.value = ""
     }
   }
 

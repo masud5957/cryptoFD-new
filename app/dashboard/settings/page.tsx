@@ -83,7 +83,7 @@ export default async function SettingsPage() {
         email={user.email || ""}
         fullName={profile?.name || ""}
         phone={profile?.phone || ""}
-        avatarUrl={""}
+        avatarUrl={profile?.profilePhoto || ""}
         usdtAddress={profile?.usdtAddress || ""}
       />
     </div>
