@@ -29,12 +29,14 @@ interface QuickAction {
 }
 
 const quickActions: QuickAction[] = [
-  { label: "How to earn?", icon: <MessageCircle className="w-3 h-3" />, query: "How do I earn money with CryptoFD?" },
-  { label: "Calculate profit", icon: <MessageCircle className="w-3 h-3" />, query: "How is my profit calculated?" },
-  { label: "Withdrawals", icon: <MessageCircle className="w-3 h-3" />, query: "How do I withdraw my earnings?" },
-  { label: "Referrals", icon: <MessageCircle className="w-3 h-3" />, query: "How does the referral program work?" },
-  { label: "FD Plans", icon: <MessageCircle className="w-3 h-3" />, query: "What are the different FD plans?" },
-  { label: "Is it safe?", icon: <MessageCircle className="w-3 h-3" />, query: "Is my money safe?" },
+  { label: "Create FD", icon: <MessageCircle className="w-3 h-3" />, query: "How do I create a fixed deposit and get started with investing?" },
+  { label: "Profit Calculator", icon: <MessageCircle className="w-3 h-3" />, query: "Calculate my profit on a $5000 investment for 30 days" },
+  { label: "Deposit Guide", icon: <MessageCircle className="w-3 h-3" />, query: "How do I deposit USDT and what are the steps?" },
+  { label: "Daily Withdrawals", icon: <MessageCircle className="w-3 h-3" />, query: "Can I withdraw my daily earnings anytime?" },
+  { label: "Referral Income", icon: <MessageCircle className="w-3 h-3" />, query: "How can I earn passive income through referrals?" },
+  { label: "Security Info", icon: <MessageCircle className="w-3 h-3" />, query: "Is my money completely safe and secure?" },
+  { label: "FD Plans", icon: <MessageCircle className="w-3 h-3" />, query: "What are all the different investment plans available?" },
+  { label: "Our Platform", icon: <MessageCircle className="w-3 h-3" />, query: "Tell me about CryptoFD and how it works" },
 ]
 
 export function Chatbot() {
@@ -122,32 +124,39 @@ export function Chatbot() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 w-96 h-[600px] bg-background rounded-2xl shadow-2xl flex flex-col z-50 border border-border">
-      {/* Header */}
-      <div className="bg-primary text-white px-6 py-4 rounded-t-2xl flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Bot className="h-5 w-5" />
-          <div>
-            <h3 className="font-semibold text-sm">CryptoFD Assistant</h3>
-            <p className="text-xs opacity-90">AI Powered Support</p>
+    <div className="fixed bottom-6 right-6 w-96 h-[600px] bg-background rounded-2xl shadow-2xl flex flex-col z-50 border border-border overflow-hidden">
+      {/* Premium Header with Gradient */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary to-primary/80" />
+        <div className="absolute top-0 right-0 w-40 h-40 bg-primary/20 rounded-full blur-3xl" />
+        
+        <div className="relative px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm">
+              <Bot className="h-5 w-5 text-white" />
+            </div>
+            <div>
+              <h3 className="font-bold text-sm text-white">CryptoFD AI</h3>
+              <p className="text-xs text-white/80">Always here to help</p>
+            </div>
           </div>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="hover:bg-white/20 rounded-full p-1.5 transition-all duration-200 hover:scale-110"
+            aria-label="Close chat"
+          >
+            <X className="h-5 w-5 text-white" />
+          </button>
         </div>
-        <button
-          onClick={() => setIsOpen(false)}
-          className="hover:bg-white/20 rounded-full p-1 transition-colors"
-          aria-label="Close chat"
-        >
-          <X className="h-5 w-5" />
-        </button>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      {/* Messages with improved styling */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gradient-to-b from-background via-background to-secondary/5">
         {messages.map(message => (
           <div
             key={message.id}
             className={cn(
-              "flex gap-2",
+              "flex gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300",
               message.type === "user" ? "justify-end" : "justify-start"
             )}
           >
@@ -156,10 +165,10 @@ export function Chatbot() {
             )}
             <div
               className={cn(
-                "px-3 py-2 rounded-lg max-w-xs break-words text-sm",
+                "px-4 py-2.5 rounded-xl max-w-xs break-words text-sm leading-relaxed shadow-sm transition-all",
                 message.type === "user"
-                  ? "bg-primary text-white rounded-br-none"
-                  : "bg-secondary text-foreground rounded-bl-none"
+                  ? "bg-gradient-to-r from-primary to-primary/90 text-white rounded-br-none font-medium"
+                  : "bg-secondary/80 text-foreground border border-border rounded-bl-none hover:bg-secondary transition-colors"
               )}
             >
               {message.content.split('\n').map((line, idx) => (
@@ -167,69 +176,80 @@ export function Chatbot() {
               ))}
             </div>
             {message.type === "user" && (
-              <User className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-1" />
+              <User className="h-5 w-5 text-primary flex-shrink-0 mt-1" />
             )}
           </div>
         ))}
         {isTyping && (
-          <div className="flex gap-2">
+          <div className="flex gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
             <Bot className="h-5 w-5 text-primary flex-shrink-0 mt-1" />
-            <div className="px-3 py-2 rounded-lg bg-secondary text-foreground rounded-bl-none">
-              <Loader2 className="h-4 w-4 animate-spin text-primary" />
+            <div className="px-4 py-2.5 rounded-xl bg-secondary/80 text-foreground border border-border rounded-bl-none">
+              <div className="flex gap-1">
+                <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
+                <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
+                <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
+              </div>
             </div>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Quick Actions - Collapsible */}
-      <div className="border-t border-border bg-secondary/30 flex-shrink-0">
+      {/* Quick Actions - Enhanced and Collapsible */}
+      <div className="border-t border-border bg-gradient-to-b from-secondary/50 to-secondary/20 flex-shrink-0">
         <button
           onClick={() => setShowQuickActions(!showQuickActions)}
-          className="w-full px-4 py-2 flex items-center justify-between hover:bg-secondary/50 transition-colors"
+          className="w-full px-4 py-3 flex items-center justify-between hover:bg-secondary/50 transition-colors duration-200 group"
         >
-          <p className="text-xs font-medium text-muted-foreground">Quick questions ({quickActions.length})</p>
-          {showQuickActions ? (
-            <ChevronUp className="h-4 w-4 text-muted-foreground" />
-          ) : (
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
-          )}
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+            Quick Questions ({quickActions.length})
+          </p>
+          <div className={cn(
+            "transition-transform duration-300",
+            showQuickActions ? "rotate-180" : ""
+          )}>
+            {showQuickActions ? (
+              <ChevronUp className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
+            ) : (
+              <ChevronDown className="h-4 w-4 text-muted-foreground group-hover:text-foreground" />
+            )}
+          </div>
         </button>
 
         {showQuickActions && (
-          <div className="px-4 pb-3 flex flex-wrap gap-2 max-h-24 overflow-y-auto">
+          <div className="px-4 pb-3 flex flex-wrap gap-2 max-h-28 overflow-y-auto animate-in slide-in-from-top-2 duration-200">
             {quickActions.map((action, idx) => (
               <Button
                 key={idx}
                 variant="outline"
                 size="sm"
-                className="text-xs gap-1 h-7 rounded-full"
+                className="text-xs gap-1.5 h-8 rounded-full hover:bg-primary hover:text-white hover:border-primary transition-all duration-200 font-medium"
                 onClick={() => handleSend(action.query)}
                 disabled={isTyping}
               >
                 {action.icon}
-                {action.label}
+                <span>{action.label}</span>
               </Button>
             ))}
           </div>
         )}
       </div>
 
-      {/* Input */}
-      <div className="p-4 border-t border-border rounded-b-2xl flex gap-2">
+      {/* Input Section - Professional */}
+      <div className="p-4 border-t border-border bg-gradient-to-r from-background to-secondary/30 flex gap-2 rounded-b-2xl">
         <Input
           ref={inputRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
-          placeholder="Type your question..."
-          className="text-sm"
+          placeholder="Ask about FDs, referrals, security..."
+          className="text-sm bg-secondary/50 border-border hover:bg-secondary/70 transition-colors focus:bg-secondary"
           disabled={isTyping}
         />
         <Button
           onClick={() => handleSend()}
           size="icon"
-          className="h-9 w-9"
+          className="h-10 w-10 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 transition-all duration-200 hover:scale-105 shadow-lg"
           disabled={!input.trim() || isTyping}
         >
           {isTyping ? (
