@@ -1,7 +1,10 @@
-import { prisma } from "@/lib/prisma"
+import { prisma } from "@/lib/db"
+import { requireAdminSession } from "@/lib/admin-auth"
 
 export async function POST(request: Request) {
   try {
+    await requireAdminSession()
+
     // Delete all existing data
     await prisma.tradingDailyRecord.deleteMany({})
     await prisma.tradingActivity.deleteMany({})
