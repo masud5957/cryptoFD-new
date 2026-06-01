@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -21,7 +21,9 @@ import {
   Smartphone,
   Loader2,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Upload,
+  X
 } from "lucide-react"
 import { updateProfile, updatePassword, updateUSDTAddress } from "@/lib/actions"
 
@@ -41,9 +43,12 @@ export function SettingsForm({
   usdtAddress 
 }: SettingsFormProps) {
   const router = useRouter()
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
+  const [photoPreview, setPhotoPreview] = useState<string | null>(avatarUrl || null)
   
   // Profile state
   const [profileData, setProfileData] = useState({
@@ -64,6 +69,61 @@ export function SettingsForm({
   const initials = fullName
     ? fullName.split(" ").map((n) => n[0]).join("").toUpperCase()
     : email.charAt(0).toUpperCase()
+
+  const handlePhotoUpload = async (file: File) => {
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"]
+    if (!allowedTypes.includes(file.type)) {
+      setError("Invalid file type. Only JPG, PNG, and WebP allowed")
+      return
+    }
+
+    // Validate file size (5MB max)
+    const maxSize = 5 * 1024 * 1024
+    if (file.size > maxSize) {
+      setError("File too large. Maximum 5MB allowed")
+      return
+    }
+
+    setError(null)
+    setIsUploadingPhoto(true)
+
+    try {
+      const formData = new FormData()
+      formData.append("photo", file)
+
+      const response = await fetch("/api/user/profile-photo", {
+        method: "POST",
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || "Failed to upload photo")
+      }
+
+      const data = await response.json()
+      setPhotoPreview(data.photo)
+      setSuccess("Photo uploaded successfully!")
+      router.refresh()
+      setTimeout(() => setSuccess(null), 5000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to upload photo")
+    } finally {
+      setIsUploadingPhoto(false)
+    }
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      handlePhotoUpload(file)
+    }
+  }
+
+  const handleRemovePhoto = () => {
+    setPhotoPreview(null)
+  }
 
   const handleProfileSubmit = async () => {
     setError(null)
@@ -175,21 +235,37 @@ export function SettingsForm({
             <div className="flex items-center gap-4">
               <div className="relative">
                 <Avatar className="h-20 w-20">
-                  <AvatarImage src={avatarUrl} alt={fullName || "User"} />
+                  <AvatarImage src={photoPreview || avatarUrl} alt={fullName || "User"} />
                   <AvatarFallback className="bg-primary/20 text-primary text-xl">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleFileChange}
+                  className="hidden"
+                />
                 <Button
                   size="icon"
                   className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploadingPhoto}
                 >
-                  <Camera className="h-4 w-4" />
+                  {isUploadingPhoto ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Camera className="h-4 w-4" />
+                  )}
                 </Button>
               </div>
               <div>
                 <p className="font-medium text-foreground">{fullName || "User"}</p>
                 <p className="text-sm text-muted-foreground">{email}</p>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  JPG, PNG or WebP (Max 5MB)
+                </p>
               </div>
             </div>
 

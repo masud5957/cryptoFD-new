@@ -17,6 +17,7 @@ model Profile {
   passwordHash     String   @map("password_hash")
   name             String?
   phone            String?
+  profilePhoto     String?  @map("profile_photo") @db.Text
   referralCode     String   @unique @default(uuid()) @map("referral_code")
   referredBy       String?  @map("referred_by")
   walletBalance    Decimal  @default(0) @map("wallet_balance") @db.Decimal(18, 6)
