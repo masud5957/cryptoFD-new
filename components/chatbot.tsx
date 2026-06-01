@@ -22,6 +22,8 @@ import {
   Lock,
   TrendingDown,
   Repeat,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -299,6 +301,7 @@ function getBotResponse(userMessage: string): string {
 
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false)
+  const [showQuickActions, setShowQuickActions] = useState(true)
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
@@ -458,23 +461,36 @@ export function Chatbot() {
             </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="px-4 py-3 border-t border-border bg-secondary/30 flex-shrink-0">
-            <p className="text-xs text-muted-foreground mb-2">Quick questions:</p>
-            <div className="flex flex-wrap gap-2">
-              {quickActions.map((action, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="sm"
-                  className="text-xs gap-1.5 h-7 rounded-full hover:bg-primary/10 hover:border-primary/50"
-                  onClick={() => handleSend(action.query)}
-                >
-                  {action.icon}
-                  {action.label}
-                </Button>
-              ))}
-            </div>
+          {/* Quick Actions - Collapsible */}
+          <div className="border-t border-border bg-secondary/30 flex-shrink-0">
+            <button
+              onClick={() => setShowQuickActions(!showQuickActions)}
+              className="w-full px-4 py-2 flex items-center justify-between hover:bg-secondary/50 transition-colors"
+            >
+              <p className="text-xs font-medium text-muted-foreground">Quick questions ({quickActions.length})</p>
+              {showQuickActions ? (
+                <ChevronUp className="h-4 w-4 text-muted-foreground" />
+              ) : (
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              )}
+            </button>
+            
+            {showQuickActions && (
+              <div className="px-4 pb-3 flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+                {quickActions.map((action, index) => (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    size="sm"
+                    className="text-xs gap-1.5 h-7 rounded-full hover:bg-primary/10 hover:border-primary/50"
+                    onClick={() => handleSend(action.query)}
+                  >
+                    {action.icon}
+                    {action.label}
+                  </Button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Input */}
