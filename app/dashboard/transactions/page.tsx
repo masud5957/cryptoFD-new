@@ -18,31 +18,38 @@ import {
   Layers, 
   Users,
   Percent,
-  Coins
+  Coins,
+  History,
+  TrendingUp
 } from "lucide-react"
 import type { Transaction } from "@/lib/types"
 
 const typeConfig: Record<string, { icon: typeof Layers; color: string; label: string }> = {
-  deposit: { icon: ArrowDownToLine, color: "bg-green-500/10 text-green-500", label: "Deposit" },
-  withdrawal: { icon: ArrowUpFromLine, color: "bg-orange-500/10 text-orange-500", label: "Withdrawal" },
-  fd_investment: { icon: Layers, color: "bg-blue-500/10 text-blue-500", label: "FD Investment" },
-  fd_earning: { icon: Percent, color: "bg-green-500/10 text-green-500", label: "FD Earning" },
-  referral_earning: { icon: Users, color: "bg-purple-500/10 text-purple-500", label: "Referral" },
-  fd_maturity: { icon: Coins, color: "bg-yellow-500/10 text-yellow-500", label: "FD Maturity" },
+  deposit: { icon: ArrowDownToLine, color: "bg-green-500/10 text-green-500 border-green-500/20", label: "Deposit" },
+  withdrawal: { icon: ArrowUpFromLine, color: "bg-orange-500/10 text-orange-500 border-orange-500/20", label: "Withdrawal" },
+  fd_investment: { icon: Layers, color: "bg-blue-500/10 text-blue-500 border-blue-500/20", label: "FD Investment" },
+  fd_earning: { icon: Percent, color: "bg-green-500/10 text-green-500 border-green-500/20", label: "FD Earning" },
+  referral_earning: { icon: TrendingUp, color: "bg-purple-500/10 text-purple-500 border-purple-500/20", label: "Referral" },
+  fd_maturity: { icon: Coins, color: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20", label: "FD Maturity" },
 }
 
 const statusConfig: Record<string, string> = {
-  completed: "bg-green-500/10 text-green-500",
-  pending: "bg-yellow-500/10 text-yellow-500",
-  failed: "bg-red-500/10 text-red-500",
-  cancelled: "bg-muted text-muted-foreground",
+  completed: "bg-green-500/10 text-green-600 dark:text-green-400 border-green-500/20 border",
+  pending: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border-yellow-500/20 border",
+  failed: "bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20 border",
+  cancelled: "bg-muted text-muted-foreground border-border border",
 }
 
 function TransactionTable({ data }: { data: Transaction[] }) {
   if (data.length === 0) {
     return (
-      <div className="py-8 text-center text-muted-foreground">
-        No transactions found
+      <div className="py-12 text-center">
+        <div className="flex justify-center mb-4">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted/50">
+            <History className="h-8 w-8 text-muted-foreground" />
+          </div>
+        </div>
+        <p className="text-muted-foreground">No transactions found</p>
       </div>
     )
   }
@@ -52,12 +59,12 @@ function TransactionTable({ data }: { data: Transaction[] }) {
       <Table>
         <TableHeader>
           <TableRow className="border-border hover:bg-transparent">
-            <TableHead className="text-muted-foreground">Type</TableHead>
-            <TableHead className="text-muted-foreground">Description</TableHead>
-            <TableHead className="text-muted-foreground">Amount</TableHead>
-            <TableHead className="text-muted-foreground">Date</TableHead>
-            <TableHead className="text-muted-foreground">Status</TableHead>
-            <TableHead className="text-muted-foreground">TX Hash</TableHead>
+            <TableHead className="text-muted-foreground font-semibold">Type</TableHead>
+            <TableHead className="text-muted-foreground font-semibold">Description</TableHead>
+            <TableHead className="text-muted-foreground font-semibold">Amount</TableHead>
+            <TableHead className="text-muted-foreground font-semibold">Date</TableHead>
+            <TableHead className="text-muted-foreground font-semibold">Status</TableHead>
+            <TableHead className="text-muted-foreground font-semibold">TX Hash</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -67,32 +74,32 @@ function TransactionTable({ data }: { data: Transaction[] }) {
             const isPositive = Number(tx.amount) > 0
 
             return (
-              <TableRow key={tx.id} className="border-border">
+              <TableRow key={tx.id} className="border-border hover:bg-secondary/50 transition-colors">
                 <TableCell>
-                  <div className="flex items-center gap-2">
-                    <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${config.color}`}>
-                      <Icon className="h-4 w-4" />
+                  <div className="flex items-center gap-3">
+                    <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${config.color} border transition-transform hover:scale-110`}>
+                      <Icon className="h-5 w-5" />
                     </div>
-                    <span className="text-sm font-medium text-foreground">{config.label}</span>
+                    <span className="text-sm font-semibold text-foreground">{config.label}</span>
                   </div>
                 </TableCell>
                 <TableCell className="font-medium text-foreground">
                   {tx.description || config.label}
                 </TableCell>
                 <TableCell>
-                  <span className={`font-medium ${isPositive ? "text-green-500" : "text-foreground"}`}>
+                  <span className={`font-bold text-base ${isPositive ? "text-green-500" : "text-foreground"}`}>
                     {isPositive ? "+" : ""}${Math.abs(Number(tx.amount)).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </TableCell>
-                <TableCell className="text-muted-foreground">
+                <TableCell className="text-muted-foreground text-sm">
                   {new Date(tx.createdAt).toLocaleString()}
                 </TableCell>
                 <TableCell>
                   <Badge className={statusConfig[tx.status]}>
-                    {tx.status}
+                    {tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}
                   </Badge>
                 </TableCell>
-                <TableCell className="font-mono text-sm text-muted-foreground">
+                <TableCell className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
                   {tx.txHash ? `${tx.txHash.slice(0, 8)}...${tx.txHash.slice(-6)}` : "-"}
                 </TableCell>
               </TableRow>
@@ -126,62 +133,79 @@ export default async function TransactionsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-foreground">Transactions</h1>
-        <p className="mt-1 text-muted-foreground">
-          View all your transaction history
-        </p>
+      {/* Premium Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/15 via-primary/5 to-accent/15 border border-primary/30 p-8">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-3xl font-bold text-foreground">Transactions</h1>
+            <Badge className="bg-primary/10 text-primary border-primary/20 border gap-1">
+              <History className="h-3 w-3" />
+              Complete History
+            </Badge>
+          </div>
+          <p className="text-muted-foreground text-lg">
+            Track all your deposits, withdrawals, and earnings
+          </p>
+        </div>
       </div>
 
-      {/* Summary Cards */}
+      {/* Summary Cards - Professional */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="rounded-2xl border-border bg-card p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-500/10">
-              <ArrowDownToLine className="h-5 w-5 text-green-500" />
+        <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-green-500/50 transition-all p-5 hover:shadow-xl hover:shadow-green-500/10">
+          <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/20 group-hover:scale-110 transition-transform duration-300">
+              <ArrowDownToLine className="h-6 w-6 text-green-500" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">Total Deposits</p>
-              <p className="text-lg font-bold text-foreground">
+              <p className="text-xs text-muted-foreground font-medium">Total Deposits</p>
+              <p className="text-xl font-bold text-foreground mt-1">
                 ${totalDeposits.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
           </div>
         </Card>
-        <Card className="rounded-2xl border-border bg-card p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-500/10">
-              <ArrowUpFromLine className="h-5 w-5 text-orange-500" />
+
+        <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-orange-500/50 transition-all p-5 hover:shadow-xl hover:shadow-orange-500/10">
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-500/20 group-hover:scale-110 transition-transform duration-300">
+              <ArrowUpFromLine className="h-6 w-6 text-orange-500" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">Total Withdrawals</p>
-              <p className="text-lg font-bold text-foreground">
+              <p className="text-xs text-muted-foreground font-medium">Total Withdrawals</p>
+              <p className="text-xl font-bold text-foreground mt-1">
                 ${totalWithdrawals.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
           </div>
         </Card>
-        <Card className="rounded-2xl border-border bg-card p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-green-500/10">
-              <Percent className="h-5 w-5 text-green-500" />
+
+        <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-emerald-500/50 transition-all p-5 hover:shadow-xl hover:shadow-emerald-500/10">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/20 group-hover:scale-110 transition-transform duration-300">
+              <Percent className="h-6 w-6 text-emerald-500" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">FD Earnings</p>
-              <p className="text-lg font-bold text-green-500">
+              <p className="text-xs text-muted-foreground font-medium">FD Earnings</p>
+              <p className="text-xl font-bold text-emerald-500 mt-1">
                 +${totalFDEarnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
           </div>
         </Card>
-        <Card className="rounded-2xl border-border bg-card p-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-500/10">
-              <Users className="h-5 w-5 text-purple-500" />
+
+        <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-purple-500/50 transition-all p-5 hover:shadow-xl hover:shadow-purple-500/10">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="relative flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/20 group-hover:scale-110 transition-transform duration-300">
+              <Users className="h-6 w-6 text-purple-500" />
             </div>
             <div>
-              <p className="text-xs text-muted-foreground">Referral Earnings</p>
-              <p className="text-lg font-bold text-purple-500">
+              <p className="text-xs text-muted-foreground font-medium">Referral Earnings</p>
+              <p className="text-xl font-bold text-purple-500 mt-1">
                 +${totalReferralEarnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
@@ -190,22 +214,27 @@ export default async function TransactionsPage() {
       </div>
 
       {/* Transactions Table */}
-      <Card className="rounded-2xl border-border bg-card p-6">
+      <Card className="rounded-2xl border-border bg-card p-6 overflow-hidden">
         <Tabs defaultValue="all" className="space-y-4">
-          <TabsList className="bg-secondary">
-            <TabsTrigger value="all" className="data-[state=active]:bg-primary">
+          <TabsList className="bg-secondary gap-1">
+            <TabsTrigger value="all" className="data-[state=active]:bg-primary gap-2">
+              <History className="h-4 w-4" />
               All ({transactions.length})
             </TabsTrigger>
-            <TabsTrigger value="deposits" className="data-[state=active]:bg-primary">
+            <TabsTrigger value="deposits" className="data-[state=active]:bg-primary gap-2">
+              <ArrowDownToLine className="h-4 w-4" />
               Deposits ({deposits.length})
             </TabsTrigger>
-            <TabsTrigger value="withdrawals" className="data-[state=active]:bg-primary">
+            <TabsTrigger value="withdrawals" className="data-[state=active]:bg-primary gap-2">
+              <ArrowUpFromLine className="h-4 w-4" />
               Withdrawals ({withdrawals.length})
             </TabsTrigger>
-            <TabsTrigger value="fd" className="data-[state=active]:bg-primary">
+            <TabsTrigger value="fd" className="data-[state=active]:bg-primary gap-2">
+              <Layers className="h-4 w-4" />
               FD ({fdTransactions.length})
             </TabsTrigger>
-            <TabsTrigger value="referral" className="data-[state=active]:bg-primary">
+            <TabsTrigger value="referral" className="data-[state=active]:bg-primary gap-2">
+              <Users className="h-4 w-4" />
               Referral ({referralTransactions.length})
             </TabsTrigger>
           </TabsList>
