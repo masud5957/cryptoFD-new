@@ -392,45 +392,45 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit }: O
           </CardHeader>
           <CardContent>
             <div className="h-[300px] flex items-center justify-center">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={portfolioData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    paddingAngle={2}
-                    dataKey="value"
-                  >
-                    {portfolioData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{ backgroundColor: "#1F2937", border: "1px solid #374151", borderRadius: "8px" }}
-                    formatter={(value: number, name: string) => [`${value}%`, name]}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-            <div className="flex flex-wrap justify-center gap-4 mt-4">
-              {portfolioData.map((item) => (
-                <div key={item.name} className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-sm text-muted-foreground">{item.name} ({item.value}%)</span>
+              {portfolioData && portfolioData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={portfolioData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={60}
+                      outerRadius={100}
+                      fill="#8884d8"
+                      paddingAngle={2}
+                      dataKey="value"
+                    >
+                      {portfolioData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "#1F2937", border: "1px solid #374151", borderRadius: "8px" }}
+                      formatter={(value: number, name: string) => [`${value}%`, name]}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="text-muted-foreground text-center">
+                  <p>No portfolio data available</p>
                 </div>
-              ))}
+              )}
             </div>
-            <div className="flex flex-wrap justify-center gap-4 mt-4">
-              {portfolioAllocation.map((item) => (
-                <div key={item.name} className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-sm text-muted-foreground">{item.name} ({item.value}%)</span>
-                </div>
-              ))}
-            </div>
+            {portfolioData && portfolioData.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-4 mt-4">
+                {portfolioData.map((item) => (
+                  <div key={item.name} className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
+                    <span className="text-sm text-muted-foreground">{item.name} ({item.value}%)</span>
+                  </div>
+                ))}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -438,52 +438,66 @@ export function OurWorksContent({ initialStats, monthlyRecords, todayProfit }: O
       {/* Crypto Price Charts */}
       <Card className="border-border bg-card">
         <CardHeader>
-          <CardTitle>Cryptocurrency Price Tracking</CardTitle>
-          <CardDescription>7-month price movements of our primary trading assets</CardDescription>
+          <CardTitle className="flex items-center gap-2">
+            <Globe className="h-5 w-5 text-blue-500" />
+            Cryptocurrency Price Tracking
+          </CardTitle>
+          <CardDescription>7-month price movements of our primary trading asset</CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="btc" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="btc">Bitcoin</TabsTrigger>
-              <TabsTrigger value="eth">Ethereum</TabsTrigger>
-              <TabsTrigger value="bnb">BNB</TabsTrigger>
-              <TabsTrigger value="sol">Solana</TabsTrigger>
-            </TabsList>
-            
-            {["btc", "eth", "bnb", "sol"].map((crypto) => (
-              <TabsContent key={crypto} value={crypto}>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={cryptoData.filter((_, i) => i % 7 === 0)}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
-                      <XAxis dataKey="date" tick={{ fill: "#9CA3AF", fontSize: 11 }} />
-                      <YAxis 
-                        tick={{ fill: "#9CA3AF", fontSize: 11 }} 
-                        domain={["auto", "auto"]}
-                        tickFormatter={(value) => crypto === "sol" ? `$${value}` : `$${(value / 1000).toFixed(0)}k`}
-                      />
-                      <Tooltip
-                        contentStyle={{ backgroundColor: "#1F2937", border: "1px solid #374151", borderRadius: "8px" }}
-                        labelStyle={{ color: "#F3F4F6" }}
-                        formatter={(value: number) => [`$${value.toLocaleString()}`, crypto.toUpperCase()]}
-                      />
-                      <Line 
-                        type="monotone" 
-                        dataKey={crypto} 
-                        stroke={
-                          crypto === "btc" ? "#F7931A" :
-                          crypto === "eth" ? "#627EEA" :
-                          crypto === "bnb" ? "#F3BA2F" : "#9945FF"
-                        }
-                        strokeWidth={2}
-                        dot={false}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
+          {cryptoPrices && cryptoPrices.length > 0 ? (
+            <Tabs defaultValue="btc" className="w-full">
+              <TabsList className="grid w-full grid-cols-4 mb-6">
+                <TabsTrigger value="btc">Bitcoin</TabsTrigger>
+                <TabsTrigger value="eth">Ethereum</TabsTrigger>
+                <TabsTrigger value="bnb">BNB</TabsTrigger>
+                <TabsTrigger value="sol">Solana</TabsTrigger>
+              </TabsList>
+              {["btc", "eth", "bnb", "sol"].map((crypto) => (
+                <TabsContent key={crypto} value={crypto}>
+                  <div className="h-[300px]">
+                    {cryptoPrices.length > 0 ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={cryptoPrices}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#374151" opacity={0.3} />
+                          <XAxis dataKey="date" tick={{ fill: "#9CA3AF", fontSize: 11 }} />
+                          <YAxis 
+                            tick={{ fill: "#9CA3AF", fontSize: 11 }} 
+                            domain={["auto", "auto"]}
+                            tickFormatter={(value) => crypto === "sol" ? `$${value}` : `$${(value / 1000).toFixed(0)}k`}
+                          />
+                          <Tooltip
+                            contentStyle={{ backgroundColor: "#1F2937", border: "1px solid #374151", borderRadius: "8px" }}
+                            labelStyle={{ color: "#F3F4F6" }}
+                            formatter={(value: number) => value ? [`$${value.toLocaleString()}`, crypto.toUpperCase()] : []}
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey={crypto} 
+                            stroke={
+                              crypto === "btc" ? "#F7931A" :
+                              crypto === "eth" ? "#627EEA" :
+                              crypto === "bnb" ? "#F3BA2F" : "#9945FF"
+                            }
+                            strokeWidth={2}
+                            dot={false}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-muted-foreground">
+                        No price data available
+                      </div>
+                    )}
+                  </div>
+                </TabsContent>
+              ))}
+            </Tabs>
+          ) : (
+            <div className="flex items-center justify-center h-[300px] text-muted-foreground">
+              <p>No cryptocurrency price data available</p>
+            </div>
+          )}
         </CardContent>
       </Card>
 
