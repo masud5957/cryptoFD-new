@@ -41,6 +41,12 @@ const quickActions: QuickAction[] = [
   { label: "Referrals", icon: <Users className="w-3 h-3" />, query: "How does the referral program work?" },
   { label: "FD Plans", icon: <Sparkles className="w-3 h-3" />, query: "What are the different FD plans?" },
   { label: "Is it safe?", icon: <Shield className="w-3 h-3" />, query: "Is my money safe?" },
+  { label: "Getting started", icon: <Zap className="w-3 h-3" />, query: "I'm new, how do I get started?" },
+  { label: "Password reset", icon: <Lock className="w-3 h-3" />, query: "How do I reset my password?" },
+  { label: "Account security", icon: <Shield className="w-3 h-3" />, query: "How do I secure my account?" },
+  { label: "Contact support", icon: <HelpCircle className="w-3 h-3" />, query: "How can I contact support?" },
+  { label: "Transaction help", icon: <TrendingDown className="w-3 h-3" />, query: "I have a transaction issue" },
+  { label: "Multiple FDs", icon: <Repeat className="w-3 h-3" />, query: "Can I have multiple FD investments?" },
 ]
 
 const knowledgeBase: { keywords: string[]; response: string }[] = [
@@ -240,6 +246,36 @@ const knowledgeBase: { keywords: string[]; response: string }[] = [
   {
     keywords: ["wallet", "address", "metamask", "trust wallet", "binance", "private key"],
     response: "Wallet and address information:\n\n**Your CryptoFD Wallet:**\n- Unique BEP-20 address\n- For deposits only\n- On your Wallet page\n- Never share or change\n\n**Supported External Wallets:**\n- Trust Wallet (recommended)\n- MetaMask\n- Binance\n- TokenPocket\n- SafePal\n- Hardware wallets (Ledger, Trezor)\n\n**For Withdrawals:**\n1. Use any BEP-20 wallet\n2. Enter wallet address\n3. Minimum $10 USDT\n4. Receives in 1 hour\n\n**Security Tips:**\n- Never share private keys\n- Use official apps only\n- Enable 2FA on wallets\n- Backup seed phrases\n\n**Support:**\nChoosing a wallet? Check our guide or email support!"
+  },
+
+  // Password Reset
+  {
+    keywords: ["password", "reset", "forgot", "change", "forgotten", "locked out", "cannot login"],
+    response: "Password reset and account access:\n\n**Forgot Your Password:**\n1. Click 'Forgot Password?' on login page\n2. Enter your email address\n3. Check your email for reset link\n4. Click link and set new password\n5. Password must be 8+ characters\n6. Recommended: Use uppercase, numbers, symbols\n\n**Password Requirements:**\n✓ At least 8 characters\n✓ One uppercase letter\n✓ One lowercase letter\n✓ One number\n✓ One special character (@, #, $, etc)\n\n**Still Can't Reset?**\n- Check spam/junk folder\n- Resend reset email\n- Wait 5-10 minutes\n- Try different browser\n- Contact support: support@cryptofd.com\n\n**Security Reminder:**\n- Never share your password\n- Unique password for each account\n- Change password quarterly\n- Report suspicious activity immediately"
+  },
+
+  // Account Security
+  {
+    keywords: ["secure", "security", "protect", "hack", "unsafe", "compromised", "2fa", "two factor"],
+    response: "Protecting your account - security best practices:\n\n**Account Protection:**\n1. Strong, unique password\n2. Don't share credentials\n3. Log out after each session\n4. Use secure wifi only\n5. Clear browser cache regularly\n\n**Security Features:**\n- Email verification on signup\n- Session timeout (30 minutes)\n- Login notifications\n- IP address tracking\n- Activity logs\n\n**Two-Factor Authentication (Coming Soon):**\n- 2FA via authenticator app\n- Adds extra login security\n- Backup codes provided\n- Enable immediately when available\n\n**If You Suspect Breach:**\n1. Change password immediately\n2. Email: security@cryptofd.com\n3. Do NOT withdraw\n4. Wait for team confirmation\n5. We'll freeze account to protect you\n\n**Device Security:**\n- Use updated OS\n- Enable device lock\n- Install antivirus\n- Don't use public wifi for transfers\n\nYour security is our priority!"
+  },
+
+  // Support Channels
+  {
+    keywords: ["support", "contact", "help", "call", "email", "phone", "reach out", "customer service"],
+    response: "Getting in touch with our support team:\n\n**Email Support:**\n- General: support@cryptofd.com\n- Urgent: emergency@cryptofd.com\n- Billing: billing@cryptofd.com\n- Security: security@cryptofd.com\n- Response time: 1-2 hours\n\n**Response Times:**\n- Priority: 30 minutes\n- Standard: 1-2 hours\n- Non-urgent: 24 hours\n\n**What to Include:**\n- Your email address\n- Transaction ID (if applicable)\n- Screenshots\n- Detailed description\n- What you've already tried\n\n**Support Availability:**\n- Live chat: 24/7 (you're using it!)\n- Email: 24/7\n- Phone: Coming soon\n- Support page: support.cryptofd.com\n\n**Community Help:**\n- Discord community\n- Telegram group\n- FAQ section\n- Knowledge base\n\n**Average Resolution:**\n- Account issues: 1 hour\n- Transaction issues: 2-3 hours\n- Verification: 24 hours\n\nOur team is always ready to help!"
+  },
+
+  // Transaction Issues
+  {
+    keywords: ["transaction", "pending", "failed", "stuck", "error", "deposit not showing", "withdrawal failed"],
+    response: "Troubleshooting transaction issues:\n\n**Deposit Not Showing:**\n1. Wait 5-10 minutes (blockchain confirms)\n2. Check transaction on BSCscan.com\n3. Verify you sent to correct address\n4. Confirm amount meets minimum ($10)\n5. Check wallet balance decreased\n\n**If Still Missing (after 30 min):**\n- Email: support@cryptofd.com\n- Include: Transaction hash (TXID)\n- We'll track it on blockchain\n- Typically resolved within 2 hours\n\n**Withdrawal Failed:**\n1. Check wallet address format\n2. Ensure BEP-20 network selected\n3. Verify sufficient balance\n4. Check minimum ($10)\n5. Retry after 5 minutes\n\n**Common Issues:**\n- Wrong network: Use BEP-20 (BSC)\n- Low balance: Need $10+ to withdraw\n- Address error: Typo in wallet address\n- Gas fees: Included in 3% fee\n\n**Status Tracking:**\n- View in Wallet > Transactions\n- Click transaction for details\n- See blockchain confirmation\n- Real-time status updates\n\n**Immediate Help:**\n- Email with transaction hash\n- Include screenshot\n- Describe issue clearly\n- We'll resolve ASAP!"
+  },
+
+  // Multiple FDs
+  {
+    keywords: ["multiple", "many", "several", "more than one", "two investments", "concurrent"],
+    response: "Yes! You can create multiple FD investments:\n\n**Multiple FD Benefits:**\n- No limit on quantity\n- Run simultaneously\n- Independent earnings\n- Flexible maturity dates\n- Stagger investments\n\n**Recommended Strategy:**\n- Create 1 FD per week\n- Different plans for variety\n- Rolling maturity schedule\n- Continuous income stream\n\n**Example Portfolio:**\nWeek 1: $1,000 Gold plan\nWeek 2: $500 Silver plan\nWeek 3: $2,000 Platinum plan\nWeek 4: $1,000 Gold plan\n\n**Results:**\n- 4 active investments\n- $4,500 invested\n- Staggered returns\n- New maturity every week\n- Compound growth potential\n\n**Managing Multiple FDs:**\n- Dashboard shows all active FDs\n- Each has independent counter\n- Individual earnings tracked\n- Withdraw from any FD\n- Create new anytime\n\n**Earning Example:**\n4 x Gold ($1,000 each) = $4,000 invested\n- Daily total: $110 (2.75% x $4,000)\n- Monthly: $3,300\n- After 30 days maturity: $7,300\n\nMultiple FDs = Faster wealth growth!"
   }
 ]
 
