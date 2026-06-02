@@ -18,7 +18,6 @@ import {
   ExternalLink,
   Info,
   BarChart3,
-  Sparkles,
 } from "lucide-react"
 
 const menuItems = [
@@ -43,12 +42,7 @@ export function Sidebar() {
         {/* Logo Section - Enhanced */}
         <div className="flex h-20 items-center border-b border-border px-6 bg-gradient-to-r from-primary/5 to-primary/10">
           <Link href="/dashboard" className="group">
-            <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-accent group-hover:shadow-lg group-hover:shadow-primary/30 transition-all">
-                <Sparkles className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <Logo size="md" />
-            </div>
+            <Logo size="md" />
           </Link>
         </div>
 
@@ -119,25 +113,21 @@ export function Sidebar() {
 
         {/* Bottom Section - Enhanced */}
         <div className="p-4 space-y-3">
-          {/* Premium Help Card */}
-          <div className="group relative rounded-xl overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <div className="relative rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 p-4 border border-primary/30 backdrop-blur-sm group-hover:border-primary/50 transition-all duration-300">
-              <div className="flex items-center gap-2 mb-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/20 group-hover:bg-primary/30 transition-colors">
-                  <HelpCircle className="h-4 w-4 text-primary" />
+          {/* Premium Help Card - Compact */}
+          <div className="group relative rounded-lg overflow-hidden">
+            <div className="relative rounded-lg bg-primary/10 p-2.5 border border-primary/25 backdrop-blur-sm group-hover:border-primary/40 transition-all duration-300">
+              <div className="flex items-center gap-1.5 mb-1">
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/20">
+                  <HelpCircle className="h-3.5 w-3.5 text-primary" />
                 </div>
-                <p className="text-sm font-bold text-foreground">24/7 Support</p>
+                <p className="text-xs font-semibold text-foreground">24/7 Support</p>
               </div>
-              <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
-                Get instant help from our expert support team
-              </p>
               <Link 
                 href="/dashboard/about" 
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary/80 transition-colors duration-200 group/link"
+                className="inline-flex items-center gap-1 text-[10px] font-semibold text-primary hover:text-primary/80 transition-colors duration-200 group/link"
               >
-                Contact Now
-                <ExternalLink className="h-3 w-3 group-hover/link:translate-x-0.5 transition-transform duration-200" />
+                Contact
+                <ExternalLink className="h-2.5 w-2.5" />
               </Link>
             </div>
           </div>
