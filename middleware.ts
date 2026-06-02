@@ -10,7 +10,7 @@ const userProtectedRoutes = ["/dashboard"]
 // Admin protected routes (require admin session cookie)
 const adminProtectedRoutes = ["/admin"]
 const authRoutes = ["/auth/login", "/auth/sign-up", "/auth/forgot-password"]
-const publicRoutes = ["/admin-login"] // Admin login page is public
+const publicRoutes = ["/admin-login", "/", "/about"] // Admin login page is public
 
 async function verifyToken(token: string): Promise<boolean> {
   try {
