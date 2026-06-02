@@ -253,6 +253,7 @@ export function Chatbot() {
             ))}
           </div>
         )}
+      </div>
 
       {/* Input Section - Professional */}
       <div className="p-4 border-t border-border bg-gradient-to-r from-background to-secondary/30 flex gap-2 rounded-b-2xl">
