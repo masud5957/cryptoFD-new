@@ -33,7 +33,7 @@ const generateChatResponse = async (message: string, systemPrompt: string) => {
           system: systemPrompt,
           prompt: message,
           temperature: 0.7,
-          maxCompletionTokens: 1024,
+          maxTokens: 1024,
         })
         return result.text
       } catch {
