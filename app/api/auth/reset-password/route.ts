@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { prisma } from "@/lib/db"
+import { db } from "@/lib/db"
 import bcrypt from "bcryptjs"
 
 export async function POST(request: Request) {
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     }
 
     // Find user
-    const user = await prisma.profile.findUnique({
+    const user = await db.profile.findUnique({
       where: { email: email.toLowerCase() },
     })
 
@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     const passwordHash = await bcrypt.hash(newPassword, 12)
 
     // Update password and clear OTP
-    await prisma.profile.update({
+    await db.profile.update({
       where: { id: user.id },
       data: {
         passwordHash,
