@@ -21,7 +21,7 @@ async function verifyToken(token: string): Promise<boolean> {
   }
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const userToken = request.cookies.get("auth_token")?.value
   const adminSession = request.cookies.get("cryptofd_admin_session")?.value
