@@ -58,35 +58,40 @@ export async function clearAuthCookie() {
 
 // Get current user from cookie
 export async function getCurrentUser() {
-  const cookieStore = await cookies()
-  const token = cookieStore.get(COOKIE_NAME)?.value
-  
-  if (!token) return null
-  
-  const payload = await verifyToken(token)
-  if (!payload) return null
-  
-  const user = await prisma.profile.findUnique({
-    where: { id: payload.userId },
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      phone: true,
-      referralCode: true,
-      referredBy: true,
-      walletBalance: true,
-      lockedBalance: true,
-      totalEarnings: true,
-      referralEarnings: true,
-      usdtAddress: true,
-      isAdmin: true,
-      isVerified: true,
-      createdAt: true,
-    }
-  })
-  
-  return user
+  try {
+    const cookieStore = await cookies()
+    const token = cookieStore.get(COOKIE_NAME)?.value
+    
+    if (!token) return null
+    
+    const payload = await verifyToken(token)
+    if (!payload) return null
+    
+    const user = await prisma.profile.findUnique({
+      where: { id: payload.userId },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        phone: true,
+        referralCode: true,
+        referredBy: true,
+        walletBalance: true,
+        lockedBalance: true,
+        totalEarnings: true,
+        referralEarnings: true,
+        usdtAddress: true,
+        isAdmin: true,
+        isVerified: true,
+        createdAt: true,
+      }
+    })
+    
+    return user
+  } catch (error) {
+    console.error("[v0] Error in getCurrentUser:", error)
+    return null
+  }
 }
 
 // Require authenticated user (throws if not authenticated)
