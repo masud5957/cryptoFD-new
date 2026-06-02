@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       where: { id: "main" }
     })
 
-    if (existing && existing.totalProfit > 0) {
+    if (existing && existing.totalProfit && Number(existing.totalProfit) > 0) {
       return NextResponse.json({ 
         error: "Data already initialized",
         stats: {
