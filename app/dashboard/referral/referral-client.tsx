@@ -89,97 +89,97 @@ export function ReferralClient({
   return (
     <div className="space-y-6">
       {/* Premium Header */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/10 via-transparent to-accent/10 border border-primary/20 p-8">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/10 via-transparent to-accent/10 border border-primary/20 p-4 sm:p-8">
+        <div className="absolute top-0 right-0 w-32 sm:w-40 h-32 sm:h-40 bg-primary/5 rounded-full blur-3xl -mr-16 sm:-mr-20 -mt-16 sm:-mt-20"></div>
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-2">
-            <h1 className="text-3xl font-bold text-foreground">Referral Program</h1>
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Referral Program</h1>
             <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 border gap-1">
               <Zap className="h-3 w-3" />
               10% Commission
             </Badge>
           </div>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-sm sm:text-base">
             Invite friends and earn unlimited passive income
           </p>
         </div>
       </div>
 
       {/* Stats Cards - Professional Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="rounded-2xl border-border bg-card/50 hover:bg-card hover:border-green-500/50 hover:shadow-lg transition-all p-6">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Total Earnings</p>
-              <p className="text-2xl font-bold text-green-500 mt-2">
+      <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card className="rounded-lg sm:rounded-2xl border-border bg-card/50 hover:bg-card hover:border-green-500/50 hover:shadow-lg transition-all p-4 sm:p-6">
+          <div className="flex items-start sm:items-center justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] sm:text-xs text-muted-foreground font-medium uppercase tracking-wider">Total Earnings</p>
+              <p className="text-lg sm:text-2xl font-bold text-green-500 mt-2 break-words">
                 ${totalEarnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-500/10">
-              <DollarSign className="h-6 w-6 text-green-500" />
+            <div className="flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg bg-green-500/10 flex-shrink-0">
+              <DollarSign className="h-5 sm:h-6 w-5 sm:w-6 text-green-500" />
             </div>
           </div>
         </Card>
 
-        <Card className="rounded-2xl border-border bg-card/50 hover:bg-card hover:border-primary/50 hover:shadow-lg transition-all p-6">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Total Referrals</p>
-              <p className="text-2xl font-bold text-foreground mt-2">{totalReferrals}</p>
+        <Card className="rounded-lg sm:rounded-2xl border-border bg-card/50 hover:bg-card hover:border-primary/50 hover:shadow-lg transition-all p-4 sm:p-6">
+          <div className="flex items-start sm:items-center justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] sm:text-xs text-muted-foreground font-medium uppercase tracking-wider">Total Referrals</p>
+              <p className="text-lg sm:text-2xl font-bold text-foreground mt-2">{totalReferrals}</p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <Users className="h-6 w-6 text-primary" />
+            <div className="flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg bg-primary/10 flex-shrink-0">
+              <Users className="h-5 sm:h-6 w-5 sm:w-6 text-primary" />
             </div>
           </div>
         </Card>
 
-        <Card className="rounded-2xl border-border bg-card/50 hover:bg-card hover:border-blue-500/50 hover:shadow-lg transition-all p-6">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Direct Referrals</p>
-              <p className="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-2">
+        <Card className="rounded-lg sm:rounded-2xl border-border bg-card/50 hover:bg-card hover:border-blue-500/50 hover:shadow-lg transition-all p-4 sm:p-6">
+          <div className="flex items-start sm:items-center justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] sm:text-xs text-muted-foreground font-medium uppercase tracking-wider">Direct Referrals</p>
+              <p className="text-lg sm:text-2xl font-bold text-blue-600 dark:text-blue-400 mt-2">
                 {displayLevels[0]?.referrals || 0}
               </p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/10">
-              <Gift className="h-6 w-6 text-blue-500" />
+            <div className="flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg bg-blue-500/10 flex-shrink-0">
+              <Gift className="h-5 sm:h-6 w-5 sm:w-6 text-blue-500" />
             </div>
           </div>
         </Card>
 
-        <Card className="rounded-2xl border-border bg-card/50 hover:bg-card hover:border-amber-500/50 hover:shadow-lg transition-all p-6">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Commission</p>
-              <p className="text-2xl font-bold text-amber-600 dark:text-amber-400 mt-2">Up to 10%</p>
+        <Card className="rounded-lg sm:rounded-2xl border-border bg-card/50 hover:bg-card hover:border-amber-500/50 hover:shadow-lg transition-all p-4 sm:p-6">
+          <div className="flex items-start sm:items-center justify-between gap-3">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] sm:text-xs text-muted-foreground font-medium uppercase tracking-wider">Commission</p>
+              <p className="text-lg sm:text-2xl font-bold text-amber-600 dark:text-amber-400 mt-2">Up to 10%</p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-500/10">
-              <Award className="h-6 w-6 text-amber-500" />
+            <div className="flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg bg-amber-500/10 flex-shrink-0">
+              <Award className="h-5 sm:h-6 w-5 sm:w-6 text-amber-500" />
             </div>
           </div>
         </Card>
       </div>
 
       {/* Referral Link Card - Enhanced */}
-      <Card className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-card to-card p-8">
-        <div className="flex items-start gap-4 mb-6">
-          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/20 flex-shrink-0">
-            <Link2 className="h-7 w-7 text-primary" />
+      <Card className="rounded-lg sm:rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-card to-card p-4 sm:p-8">
+        <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
+          <div className="flex h-12 sm:h-14 w-12 sm:w-14 items-center justify-center rounded-lg sm:rounded-xl bg-primary/20 flex-shrink-0">
+            <Link2 className="h-6 sm:h-7 w-6 sm:w-7 text-primary" />
           </div>
-          <div>
-            <h3 className="text-2xl font-bold text-foreground">Your Referral Link</h3>
-            <p className="text-muted-foreground mt-1">Share to earn 10% on referrals' daily earnings</p>
+          <div className="min-w-0 flex-1">
+            <h3 className="text-lg sm:text-2xl font-bold text-foreground">Your Referral Link</h3>
+            <p className="text-xs sm:text-sm text-muted-foreground mt-1">Share to earn 10% on referrals' daily earnings</p>
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           <div>
-            <label className="text-sm font-semibold text-foreground block mb-2">Referral Code</label>
-            <div className="flex gap-2">
+            <label className="text-xs sm:text-sm font-semibold text-foreground block mb-2">Referral Code</label>
+            <div className="flex gap-2 flex-col sm:flex-row">
               <Input
                 value={referralCode}
                 readOnly
-                className="bg-secondary/50 font-mono text-lg font-bold border-border"
+                className="bg-secondary/50 font-mono text-sm sm:text-lg font-bold border-border"
               />
               <Button 
                 variant="secondary" 
@@ -193,12 +193,12 @@ export function ReferralClient({
           </div>
 
           <div>
-            <label className="text-sm font-semibold text-foreground block mb-2">Referral Link</label>
-            <div className="flex gap-2">
+            <label className="text-xs sm:text-sm font-semibold text-foreground block mb-2">Referral Link</label>
+            <div className="flex gap-2 flex-col sm:flex-row">
               <Input
                 value={referralLink}
                 readOnly
-                className="bg-secondary/50 text-muted-foreground border-border truncate"
+                className="bg-secondary/50 text-muted-foreground border-border text-xs sm:text-sm truncate"
               />
               <Button 
                 variant="secondary" 
@@ -211,12 +211,12 @@ export function ReferralClient({
             </div>
           </div>
 
-          <div className="flex gap-3 pt-3">
-            <Button onClick={() => handleCopy(referralLink)} className="flex-1 gap-2 h-11">
+          <div className="flex gap-2 sm:gap-3 pt-2 sm:pt-3 flex-col sm:flex-row">
+            <Button onClick={() => handleCopy(referralLink)} className="flex-1 gap-2 h-10 sm:h-11 text-sm sm:text-base">
               <Copy className="h-4 w-4" />
               Copy Full Link
             </Button>
-            <Button variant="secondary" onClick={handleShare} className="flex-1 gap-2 h-11">
+            <Button variant="secondary" onClick={handleShare} className="flex-1 gap-2 h-10 sm:h-11 text-sm sm:text-base">
               <Share2 className="h-4 w-4" />
               Share
             </Button>

@@ -134,78 +134,78 @@ export default async function TransactionsPage() {
   return (
     <div className="space-y-6">
       {/* Premium Header */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/15 via-primary/5 to-accent/15 border border-primary/30 p-8">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/15 via-primary/5 to-accent/15 border border-primary/30 p-4 sm:p-8">
+        <div className="absolute top-0 right-0 w-32 sm:w-40 h-32 sm:h-40 bg-primary/5 rounded-full blur-3xl -mr-16 sm:-mr-20 -mt-16 sm:-mt-20"></div>
         <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold text-foreground">Transactions</h1>
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">Transactions</h1>
             <Badge className="bg-primary/10 text-primary border-primary/20 border gap-1">
               <History className="h-3 w-3" />
               Complete History
             </Badge>
           </div>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-sm sm:text-base">
             Track all your deposits, withdrawals, and earnings
           </p>
         </div>
       </div>
 
       {/* Summary Cards - Professional */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-green-500/50 transition-all p-5 hover:shadow-xl hover:shadow-green-500/10">
+      <div className="grid gap-3 sm:gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Card className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-green-500/50 transition-all p-4 sm:p-5 hover:shadow-xl hover:shadow-green-500/10">
           <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="relative flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-500/20 group-hover:scale-110 transition-transform duration-300">
-              <ArrowDownToLine className="h-6 w-6 text-green-500" />
+          <div className="relative flex items-start sm:items-center gap-3 sm:gap-4">
+            <div className="flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl bg-green-500/20 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+              <ArrowDownToLine className="h-5 sm:h-6 w-5 sm:w-6 text-green-500" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-xs text-muted-foreground font-medium">Total Deposits</p>
-              <p className="text-xl font-bold text-foreground mt-1">
+              <p className="text-lg sm:text-xl font-bold text-foreground mt-1 break-words">
                 ${totalDeposits.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
           </div>
         </Card>
 
-        <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-orange-500/50 transition-all p-5 hover:shadow-xl hover:shadow-orange-500/10">
+        <Card className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-orange-500/50 transition-all p-4 sm:p-5 hover:shadow-xl hover:shadow-orange-500/10">
           <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="relative flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-500/20 group-hover:scale-110 transition-transform duration-300">
-              <ArrowUpFromLine className="h-6 w-6 text-orange-500" />
+          <div className="relative flex items-start sm:items-center gap-3 sm:gap-4">
+            <div className="flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl bg-orange-500/20 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+              <ArrowUpFromLine className="h-5 sm:h-6 w-5 sm:w-6 text-orange-500" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-xs text-muted-foreground font-medium">Total Withdrawals</p>
-              <p className="text-xl font-bold text-foreground mt-1">
+              <p className="text-lg sm:text-xl font-bold text-foreground mt-1 break-words">
                 ${totalWithdrawals.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
           </div>
         </Card>
 
-        <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-emerald-500/50 transition-all p-5 hover:shadow-xl hover:shadow-emerald-500/10">
+        <Card className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-emerald-500/50 transition-all p-4 sm:p-5 hover:shadow-xl hover:shadow-emerald-500/10">
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="relative flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/20 group-hover:scale-110 transition-transform duration-300">
-              <Percent className="h-6 w-6 text-emerald-500" />
+          <div className="relative flex items-start sm:items-center gap-3 sm:gap-4">
+            <div className="flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl bg-emerald-500/20 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+              <Percent className="h-5 sm:h-6 w-5 sm:w-6 text-emerald-500" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-xs text-muted-foreground font-medium">FD Earnings</p>
-              <p className="text-xl font-bold text-emerald-500 mt-1">
+              <p className="text-lg sm:text-xl font-bold text-emerald-500 mt-1 break-words">
                 +${totalFDEarnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
           </div>
         </Card>
 
-        <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-purple-500/50 transition-all p-5 hover:shadow-xl hover:shadow-purple-500/10">
+        <Card className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-purple-500/50 transition-all p-4 sm:p-5 hover:shadow-xl hover:shadow-purple-500/10">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="relative flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/20 group-hover:scale-110 transition-transform duration-300">
-              <Users className="h-6 w-6 text-purple-500" />
+          <div className="relative flex items-start sm:items-center gap-3 sm:gap-4">
+            <div className="flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl bg-purple-500/20 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+              <Users className="h-5 sm:h-6 w-5 sm:w-6 text-purple-500" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-xs text-muted-foreground font-medium">Referral Earnings</p>
-              <p className="text-xl font-bold text-purple-500 mt-1">
+              <p className="text-lg sm:text-xl font-bold text-purple-500 mt-1 break-words">
                 +${totalReferralEarnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>

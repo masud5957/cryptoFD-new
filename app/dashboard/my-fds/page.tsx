@@ -146,35 +146,35 @@ export default async function MyFDsPage() {
   return (
     <div className="space-y-6">
       {/* Premium Header */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary/15 via-primary/5 to-accent/15 border border-primary/30 p-8 group">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mr-32 -mt-32 group-hover:scale-110 transition-transform duration-500"></div>
-        <div className="absolute bottom-0 left-20 w-40 h-40 bg-accent/10 rounded-full blur-2xl -mb-20 -ml-20 group-hover:scale-125 transition-transform duration-500"></div>
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-primary/15 via-primary/5 to-accent/15 border border-primary/30 p-4 sm:p-8 group">
+        <div className="absolute top-0 right-0 w-40 sm:w-64 h-40 sm:h-64 bg-primary/10 rounded-full blur-3xl -mr-16 sm:-mr-32 -mt-16 sm:-mt-32 group-hover:scale-110 transition-transform duration-500"></div>
+        <div className="absolute bottom-0 left-10 sm:left-20 w-32 sm:w-40 h-32 sm:h-40 bg-accent/10 rounded-full blur-2xl -mb-16 sm:-mb-20 -ml-16 sm:-ml-20 group-hover:scale-125 transition-transform duration-500"></div>
         <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground">My Fixed Deposits</h1>
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 flex-wrap">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">My Fixed Deposits</h1>
             <Badge className="bg-violet-500/10 text-violet-600 dark:text-violet-400 border-violet-500/20 border gap-1.5">
               <Layers className="h-3 w-3" />
               Growing
             </Badge>
           </div>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-muted-foreground text-sm sm:text-base">
             Track and manage all your active investments and earnings
           </p>
         </div>
       </div>
 
       {/* Summary Cards - Professional Grid */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 sm:grid-cols-3">
         {/* Total Locked */}
-        <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-primary/50 transition-all p-6 hover:shadow-xl hover:shadow-primary/10">
+        <Card className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-primary/50 transition-all p-4 sm:p-6 hover:shadow-xl hover:shadow-primary/10">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="relative flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary/20 group-hover:scale-110 transition-transform duration-300">
-              <Wallet className="h-7 w-7 text-primary" />
+          <div className="relative flex items-start sm:items-center gap-3 sm:gap-4">
+            <div className="flex h-12 sm:h-14 w-12 sm:w-14 items-center justify-center rounded-lg sm:rounded-xl bg-primary/20 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+              <Wallet className="h-6 sm:h-7 w-6 sm:w-7 text-primary" />
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Total Locked</p>
-              <p className="mt-2 text-2xl font-bold text-foreground">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] sm:text-xs text-muted-foreground font-bold uppercase tracking-widest">Total Locked</p>
+              <p className="mt-2 text-xl sm:text-2xl font-bold text-foreground break-words">
                 ${totalLocked.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
@@ -182,15 +182,15 @@ export default async function MyFDsPage() {
         </Card>
         
         {/* Total Earned */}
-        <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-green-500/50 transition-all p-6 hover:shadow-xl hover:shadow-green-500/10">
+        <Card className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-green-500/50 transition-all p-4 sm:p-6 hover:shadow-xl hover:shadow-green-500/10">
           <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="relative flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-green-500/20 group-hover:scale-110 transition-transform duration-300">
-              <TrendingUp className="h-7 w-7 text-green-500" />
+          <div className="relative flex items-start sm:items-center gap-3 sm:gap-4">
+            <div className="flex h-12 sm:h-14 w-12 sm:w-14 items-center justify-center rounded-lg sm:rounded-xl bg-green-500/20 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+              <TrendingUp className="h-6 sm:h-7 w-6 sm:w-7 text-green-500" />
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Total Earned</p>
-              <p className="mt-2 text-2xl font-bold text-green-500">
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] sm:text-xs text-muted-foreground font-bold uppercase tracking-widest">Total Earned</p>
+              <p className="mt-2 text-xl sm:text-2xl font-bold text-green-500 break-words">
                 +${totalEarned.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </p>
             </div>
@@ -198,15 +198,15 @@ export default async function MyFDsPage() {
         </Card>
         
         {/* Active FDs */}
-        <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-blue-500/50 transition-all p-6 hover:shadow-xl hover:shadow-blue-500/10">
+        <Card className="group relative rounded-xl sm:rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:border-blue-500/50 transition-all p-4 sm:p-6 hover:shadow-xl hover:shadow-blue-500/10">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          <div className="relative flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-blue-500/20 group-hover:scale-110 transition-transform duration-300">
-              <Flame className="h-7 w-7 text-blue-500" />
+          <div className="relative flex items-start sm:items-center gap-3 sm:gap-4">
+            <div className="flex h-12 sm:h-14 w-12 sm:w-14 items-center justify-center rounded-lg sm:rounded-xl bg-blue-500/20 group-hover:scale-110 transition-transform duration-300 flex-shrink-0">
+              <Flame className="h-6 sm:h-7 w-6 sm:w-7 text-blue-500" />
             </div>
-            <div>
-              <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Active FDs</p>
-              <p className="mt-2 text-2xl font-bold text-blue-600 dark:text-blue-400">{activeFDs.length}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] sm:text-xs text-muted-foreground font-bold uppercase tracking-widest">Active FDs</p>
+              <p className="mt-2 text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">{activeFDs.length}</p>
             </div>
           </div>
         </Card>

@@ -62,22 +62,31 @@ export default function AboutPage() {
   ]
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-foreground mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
           About <span className="text-primary">CryptoFD</span>
         </h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-muted-foreground max-w-2xl mx-auto text-sm sm:text-base">
           A leading cryptocurrency fixed deposit platform helping you grow your USDT with competitive daily returns.
         </p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4">
         {stats.map((stat, index) => (
-          <Card key={index} className="border-border/50 bg-card text-center">
-            <CardContent className="pt-6">
+          <Card key={index} className="border-border/50 bg-card text-center p-3 sm:p-6 rounded-lg sm:rounded-xl">
+            <CardContent className="pt-3 sm:pt-6 space-y-2">
+              <stat.icon className="h-6 sm:h-8 w-6 sm:w-8 mx-auto text-primary" />
+              <div>
+                <p className="text-xl sm:text-2xl font-bold text-foreground">{stat.value}</p>
+                <p className="text-xs sm:text-sm text-muted-foreground font-medium">{stat.label}</p>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
               <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-3">
                 <stat.icon className="w-5 h-5 text-primary" />
               </div>
@@ -89,11 +98,11 @@ export default function AboutPage() {
       </div>
 
       {/* Our Story */}
-      <Card className="border-border/50 bg-card">
-        <CardContent className="pt-6">
-          <h2 className="text-xl font-bold text-foreground mb-4">Our Story</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="space-y-4 text-muted-foreground">
+      <Card className="border-border/50 bg-card rounded-xl sm:rounded-2xl">
+        <CardContent className="pt-4 sm:pt-6 space-y-4 sm:space-y-6">
+          <h2 className="text-lg sm:text-xl font-bold text-foreground">Our Story</h2>
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
+            <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-muted-foreground leading-relaxed">
               <p>
                 CryptoFD was founded by a team of passionate students from <span className="text-primary font-semibold">Stanford University</span>, 
                 who believed that cryptocurrency investing should be simple, secure, and accessible to everyone.
@@ -104,26 +113,26 @@ export default function AboutPage() {
                 consistent daily returns on your USDT investments.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-secondary/50 rounded-xl p-4 text-center">
-                <MapPin className="w-6 h-6 text-primary mx-auto mb-2" />
-                <p className="font-semibold text-sm text-foreground">London, UK</p>
-                <p className="text-xs text-muted-foreground">Headquarters</p>
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+              <div className="bg-secondary/50 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center">
+                <MapPin className="w-4 sm:w-6 h-4 sm:h-6 text-primary mx-auto mb-2" />
+                <p className="font-semibold text-xs sm:text-sm text-foreground">London, UK</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Headquarters</p>
               </div>
-              <div className="bg-secondary/50 rounded-xl p-4 text-center">
-                <GraduationCap className="w-6 h-6 text-primary mx-auto mb-2" />
-                <p className="font-semibold text-sm text-foreground">Stanford</p>
-                <p className="text-xs text-muted-foreground">Founded By</p>
+              <div className="bg-secondary/50 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center">
+                <GraduationCap className="w-4 sm:w-6 h-4 sm:h-6 text-primary mx-auto mb-2" />
+                <p className="font-semibold text-xs sm:text-sm text-foreground">Stanford</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Founded By</p>
               </div>
-              <div className="bg-secondary/50 rounded-xl p-4 text-center">
-                <Building2 className="w-6 h-6 text-primary mx-auto mb-2" />
-                <p className="font-semibold text-sm text-foreground">2022</p>
-                <p className="text-xs text-muted-foreground">Established</p>
+              <div className="bg-secondary/50 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center">
+                <Building2 className="w-4 sm:w-6 h-4 sm:h-6 text-primary mx-auto mb-2" />
+                <p className="font-semibold text-xs sm:text-sm text-foreground">2022</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Established</p>
               </div>
-              <div className="bg-secondary/50 rounded-xl p-4 text-center">
-                <Shield className="w-6 h-6 text-primary mx-auto mb-2" />
-                <p className="font-semibold text-sm text-foreground">Bank-Grade</p>
-                <p className="text-xs text-muted-foreground">Security</p>
+              <div className="bg-secondary/50 rounded-lg sm:rounded-xl p-3 sm:p-4 text-center">
+                <Shield className="w-4 sm:w-6 h-4 sm:h-6 text-primary mx-auto mb-2" />
+                <p className="font-semibold text-xs sm:text-sm text-foreground">Bank-Grade</p>
+                <p className="text-[10px] sm:text-xs text-muted-foreground">Security</p>
               </div>
             </div>
           </div>
@@ -131,17 +140,17 @@ export default function AboutPage() {
       </Card>
 
       {/* Features */}
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-2 gap-3 sm:gap-4">
         {features.map((feature, index) => (
-          <Card key={index} className="border-border/50 bg-card hover:border-primary/30 transition-colors">
-            <CardContent className="pt-6">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
-                  <feature.icon className="w-5 h-5 text-primary" />
+          <Card key={index} className="border-border/50 bg-card hover:border-primary/30 transition-colors rounded-lg sm:rounded-xl">
+            <CardContent className="pt-4 sm:pt-6">
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="w-9 sm:w-10 h-9 sm:h-10 rounded-lg sm:rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
+                  <feature.icon className="w-4 sm:w-5 h-4 sm:h-5 text-primary" />
                 </div>
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground">{feature.description}</p>
+                <div className="min-w-0 flex-1">
+                  <h3 className="font-semibold text-foreground mb-1 text-sm sm:text-base">{feature.title}</h3>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
                 </div>
               </div>
             </CardContent>
@@ -150,36 +159,37 @@ export default function AboutPage() {
       </div>
 
       {/* Trust */}
-      <div className="grid md:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-3 gap-3 sm:gap-4">
         {trustItems.map((item, index) => (
-          <Card key={index} className="border-border/50 bg-card">
-            <CardContent className="pt-6">
-              <CheckCircle className="w-6 h-6 text-green-500 mb-3" />
-              <h3 className="font-semibold text-foreground mb-1">{item.name}</h3>
-              <p className="text-sm text-muted-foreground">{item.description}</p>
+          <Card key={index} className="border-border/50 bg-card rounded-lg sm:rounded-xl">
+            <CardContent className="pt-4 sm:pt-6">
+              <CheckCircle className="w-5 sm:w-6 h-5 sm:h-6 text-green-500 mb-2 sm:mb-3" />
+              <h3 className="font-semibold text-foreground mb-1 text-sm sm:text-base">{item.name}</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{item.description}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
       {/* Contact */}
-      <Card className="border-primary/30 bg-primary/5">
-        <CardContent className="pt-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                <Mail className="w-6 h-6 text-primary" />
+      <Card className="border-primary/30 bg-primary/5 rounded-lg sm:rounded-xl">
+        <CardContent className="pt-4 sm:pt-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+            <div className="flex items-start sm:items-center gap-3 sm:gap-4 w-full">
+              <div className="w-10 sm:w-12 h-10 sm:h-12 rounded-lg sm:rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                <Mail className="w-5 sm:w-6 h-5 sm:h-6 text-primary" />
               </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Need Help? Contact Us</p>
-                <a href="mailto:support@cryptofd.com" className="text-lg font-semibold text-primary hover:underline">
+              <div className="min-w-0 flex-1">
+                <p className="text-xs sm:text-sm text-muted-foreground">Need Help? Contact Us</p>
+                <a href="mailto:support@cryptofd.com" className="text-base sm:text-lg font-semibold text-primary hover:underline truncate">
                   support@cryptofd.com
                 </a>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-muted-foreground">
+            <div className="flex items-center gap-2 text-muted-foreground text-xs sm:text-sm flex-shrink-0">
               <MapPin className="w-4 h-4" />
-              <span className="text-sm">London, United Kingdom</span>
+              <span className="hidden sm:inline">London, United Kingdom</span>
+              <span className="sm:hidden">UK</span>
             </div>
           </div>
         </CardContent>
