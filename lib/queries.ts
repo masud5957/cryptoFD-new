@@ -162,7 +162,16 @@ export async function getTeamStats(): Promise<TeamStats[]> {
   // Commission rates by level
   const commissionRates: Record<number, number> = { 1: 10, 2: 5, 3: 2 }
 
-  // Group by level
+  // Get all transactions for referred users (both referral_earning and referral_commission)
+  const referredUserIds = referrals.map(r => r.referredId)
+  const transactions = await prisma.transaction.findMany({
+    where: {
+      userId: { in: referredUserIds },
+      type: { in: ["referral_earning", "referral_commission"] }
+    }
+  })
+
+  // Group by level and calculate earnings
   const statsMap = new Map<number, TeamStats>()
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -174,6 +183,12 @@ export async function getTeamStats(): Promise<TeamStats[]> {
       commissionRate: commissionRates[ref.level] || 0
     }
     existing.count++
+    
+    // Calculate earnings from transactions for this referral user
+    const userTransactions = transactions.filter(t => t.userId === ref.referredId)
+    const earnings = userTransactions.reduce((sum, t) => sum + Number(t.amount || 0), 0)
+    existing.totalEarned += earnings
+    
     statsMap.set(ref.level, existing)
   }
 
