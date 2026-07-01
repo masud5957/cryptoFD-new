@@ -32,29 +32,27 @@ const typeConfig: Record<string, { icon: typeof Layers; gradient: string; label:
 export function ActivityTable({ transactions }: ActivityTableProps) {
   if (transactions.length === 0) {
     return (
-      <Card className="rounded-2xl border-border bg-card overflow-hidden">
-        <div className="p-6 border-b border-border">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-                <Activity className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-foreground">Recent Activity</h3>
-                <p className="text-sm text-muted-foreground">Your latest transactions</p>
-              </div>
+      <Card className="rounded-lg sm:rounded-2xl border-border bg-card overflow-hidden">
+        <div className="p-4 sm:p-6 border-b border-border">
+          <div className="flex items-start sm:items-center gap-2 sm:gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg sm:rounded-xl bg-primary/10 flex-shrink-0">
+              <Activity className="h-5 w-5 text-primary" />
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-base sm:text-lg font-semibold text-foreground">Recent Activity</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground">Your latest transactions</p>
             </div>
           </div>
         </div>
-        <div className="p-12 text-center">
-          <div className="w-16 h-16 rounded-full bg-secondary/50 flex items-center justify-center mx-auto mb-4">
-            <Clock className="h-8 w-8 text-muted-foreground" />
+        <div className="p-8 sm:p-12 text-center">
+          <div className="w-12 sm:w-16 h-12 sm:h-16 rounded-full bg-secondary/50 flex items-center justify-center mx-auto mb-3 sm:mb-4">
+            <Clock className="h-6 sm:h-8 w-6 sm:w-8 text-muted-foreground" />
           </div>
-          <p className="text-foreground font-medium">No transactions yet</p>
-          <p className="text-sm text-muted-foreground mt-1 mb-4">
-            Start investing to see your activity here
+          <p className="text-foreground font-medium text-sm sm:text-base">No transactions yet</p>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1 mb-3 sm:mb-4">
+            Start investing to see your activity
           </p>
-          <Button asChild>
+          <Button asChild size="sm" className="text-xs sm:text-sm">
             <Link href="/dashboard/create-fd">
               Make Your First Investment
             </Link>
@@ -65,21 +63,22 @@ export function ActivityTable({ transactions }: ActivityTableProps) {
   }
 
   return (
-    <Card className="rounded-2xl border-border bg-card overflow-hidden">
-      <div className="p-6 border-b border-border">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+    <Card className="rounded-lg sm:rounded-2xl border-border bg-card overflow-hidden">
+      <div className="p-4 sm:p-6 border-b border-border">
+        <div className="flex items-start sm:items-center justify-between gap-2 sm:gap-3">
+          <div className="flex items-start sm:items-center gap-2 sm:gap-3 min-w-0 flex-1">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg sm:rounded-xl bg-primary/10 flex-shrink-0">
               <Activity className="h-5 w-5 text-primary" />
             </div>
-            <div>
-              <h3 className="text-lg font-semibold text-foreground">Recent Activity</h3>
-              <p className="text-sm text-muted-foreground">Your latest transactions</p>
+            <div className="min-w-0">
+              <h3 className="text-base sm:text-lg font-semibold text-foreground truncate">Recent Activity</h3>
+              <p className="text-xs sm:text-sm text-muted-foreground truncate">Your latest transactions</p>
             </div>
           </div>
-          <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground">
+          <Button variant="ghost" size="sm" asChild className="text-muted-foreground hover:text-foreground text-xs sm:text-sm h-8 px-2 flex-shrink-0">
             <Link href="/dashboard/transactions" className="flex items-center gap-1">
-              View All
+              <span className="hidden sm:inline">View All</span>
+              <span className="inline sm:hidden">All</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
@@ -93,14 +92,14 @@ export function ActivityTable({ transactions }: ActivityTableProps) {
           const isPositive = tx.amount > 0 && tx.type !== "withdrawal" && tx.type !== "fd_investment"
           
           return (
-            <div key={tx.id} className="flex items-center justify-between p-4 hover:bg-secondary/30 transition-colors">
-              <div className="flex items-center gap-4">
-                <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br ${config.gradient} shadow-lg`}>
-                  <Icon className="h-5 w-5 text-white" />
+            <div key={tx.id} className="flex items-center justify-between gap-2 sm:gap-4 p-3 sm:p-4 hover:bg-secondary/30 transition-colors">
+              <div className="flex items-center gap-2 sm:gap-4 min-w-0 flex-1">
+                <div className={`flex h-9 sm:h-10 w-9 sm:w-10 items-center justify-center rounded-lg sm:rounded-xl bg-gradient-to-br ${config.gradient} shadow-lg flex-shrink-0`}>
+                  <Icon className="h-4 sm:h-5 w-4 sm:w-5 text-white" />
                 </div>
-                <div>
-                  <p className="font-medium text-foreground">{config.label}</p>
-                  <p className="text-sm text-muted-foreground">
+                <div className="min-w-0">
+                  <p className="font-medium text-xs sm:text-base text-foreground truncate">{config.label}</p>
+                  <p className="text-xs text-muted-foreground truncate">
                     {new Date(tx.createdAt).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -111,20 +110,20 @@ export function ActivityTable({ transactions }: ActivityTableProps) {
                 </div>
               </div>
               
-              <div className="text-right">
-                <p className={`font-semibold ${isPositive ? "text-emerald-500" : "text-foreground"}`}>
+              <div className="text-right flex-shrink-0">
+                <p className={`font-semibold text-xs sm:text-base ${isPositive ? "text-emerald-500" : "text-foreground"}`}>
                   {isPositive ? "+" : tx.type === "withdrawal" || tx.type === "fd_investment" ? "-" : ""}
                   ${Math.abs(tx.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </p>
                 <Badge
                   variant="secondary"
-                  className={
+                  className={`text-xs ${
                     tx.status === "completed" 
-                      ? "bg-emerald-500/10 text-emerald-500 text-xs" 
+                      ? "bg-emerald-500/10 text-emerald-500" 
                       : tx.status === "pending"
-                      ? "bg-amber-500/10 text-amber-500 text-xs"
-                      : "bg-red-500/10 text-red-500 text-xs"
-                  }
+                      ? "bg-amber-500/10 text-amber-500"
+                      : "bg-red-500/10 text-red-500"
+                  }`}
                 >
                   {tx.status}
                 </Badge>
