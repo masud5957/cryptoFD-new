@@ -67,6 +67,9 @@ export async function createFD(planId: string, amount: number) {
           amount,
           dailyEarning,
           endDate,
+          lastPayoutDate: new Date(),
+          totalEarned: 0,
+          status: "active",
         }
       })
       

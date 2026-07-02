@@ -1,21 +1,9 @@
 import { prisma, incrementBalance } from "./db";
 
-// Check if today is a weekend (Saturday or Sunday)
-function isWeekend(date: Date): boolean {
-  const day = date.getDay();
-  return day === 0 || day === 6; // 0 = Sunday, 6 = Saturday
-}
-
-// Process daily FD earnings - credits to wallet_balance (Monday-Friday only)
+// Process daily FD earnings - credits to wallet_balance (every day, including weekends)
 export async function processFDEarnings() {
   try {
     const now = new Date();
-
-    // Skip processing on weekends
-    if (isWeekend(now)) {
-      console.log(`[FDEarnings] Skipping - Weekend (${now.toDateString()})`);
-      return;
-    }
 
     // Get all active FDs
     const activeFDs = await prisma.userFD.findMany({
@@ -46,23 +34,21 @@ export async function processFDEarnings() {
           continue; // Not yet time for daily payout
         }
 
-        // Calculate days to pay (skip weekends)
+        // Calculate days to pay (all days, including weekends)
         let daysToPay = 0;
         let currentDate = new Date(lastPayout);
         currentDate.setDate(currentDate.getDate() + 1); // Start from next day
         
         while (currentDate <= now) {
-          if (!isWeekend(currentDate)) {
-            daysToPay++;
-          }
+          daysToPay++;
           currentDate.setDate(currentDate.getDate() + 1);
         }
 
-        if (daysToPay === 0) continue; // No weekdays to pay
+        if (daysToPay === 0) continue; // No days to pay
 
         const earningsToPay = Number(fd.dailyEarning) * daysToPay;
 
-        console.log(`[FDEarnings] Crediting ${earningsToPay} USDT (${daysToPay} weekdays) for user ${fd.userId}`);
+        console.log(`[FDEarnings] Crediting ${earningsToPay} USDT (${daysToPay} days) for user ${fd.userId}`);
 
         // Update FD record
         const newTotalEarned = Number(fd.totalEarned) + earningsToPay;
@@ -115,7 +101,7 @@ async function handleFDMaturity(fd: any) {
 
   const principalAmount = Number(fd.amount);
   
-  // Calculate any remaining unpaid earnings (skip weekends)
+  // Calculate any remaining unpaid earnings (all days, including weekends)
   const lastPayout = new Date(fd.lastPayoutDate);
   const endDate = new Date(fd.endDate);
   
@@ -124,9 +110,7 @@ async function handleFDMaturity(fd: any) {
   currentDate.setDate(currentDate.getDate() + 1);
   
   while (currentDate <= endDate) {
-    if (!isWeekend(currentDate)) {
-      remainingDays++;
-    }
+    remainingDays++;
     currentDate.setDate(currentDate.getDate() + 1);
   }
   

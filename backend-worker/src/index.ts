@@ -46,8 +46,8 @@ cron.schedule("*/60 * * * * *", async () => {
   }
 });
 
-// Process FD earnings every hour
-cron.schedule("0 * * * *", async () => {
+// Process FD earnings every 15 minutes (to credit ROI daily)
+cron.schedule("*/15 * * * *", async () => {
   try {
     await processFDEarnings();
   } catch (err) {
@@ -60,5 +60,5 @@ console.log("  - Deposit scanner: every 15 seconds");
 console.log("  - Gas service: every 30 seconds");
 console.log("  - Sweep executor: every minute");
 console.log("  - Withdrawal executor: every 60 seconds");
-console.log("  - FD earnings processor: every hour");
+console.log("  - FD earnings processor: every 15 minutes");
 console.log("[Worker] Running...");
