@@ -348,19 +348,19 @@ export function SettingsForm({
               </div>
             </div>
 
-            {error && (
-              <Alert variant="destructive" className="mt-4">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
+          {error && (
+            <Alert variant="destructive" className="mt-3 sm:mt-4">
+              <AlertCircle className="h-3.5 sm:h-4 w-3.5 sm:w-4 flex-shrink-0" />
+              <AlertDescription className="text-xs sm:text-sm">{error}</AlertDescription>
+            </Alert>
+          )}
 
-            {success && (
-              <Alert className="mt-4 border-green-500/50 bg-green-500/10">
-                <CheckCircle className="h-4 w-4 text-green-500" />
-                <AlertDescription className="text-green-500">{success}</AlertDescription>
-              </Alert>
-            )}
+          {success && (
+            <Alert className="mt-3 sm:mt-4 border-green-500/50 bg-green-500/10">
+              <CheckCircle className="h-3.5 sm:h-4 w-3.5 sm:w-4 text-green-500 flex-shrink-0" />
+              <AlertDescription className="text-xs sm:text-sm text-green-500">{success}</AlertDescription>
+            </Alert>
+          )}
 
             <div className="mt-4 space-y-4">
               <div>
@@ -418,13 +418,13 @@ export function SettingsForm({
 
       {/* Notifications Tab */}
       <TabsContent value="notifications">
-        <Card className="rounded-2xl border-border bg-card p-6">
-          <h3 className="text-lg font-semibold text-foreground">Notification Preferences</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
+        <Card className="rounded-lg sm:rounded-2xl border-border bg-card p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-semibold text-foreground">Notification Preferences</h3>
+          <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
             Choose what notifications you want to receive
           </p>
 
-          <div className="mt-6 space-y-4">
+          <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
             {[
               { title: "FD Maturity Alerts", description: "Get notified when your FD is about to mature" },
               { title: "Interest Credits", description: "Receive notifications when interest is credited" },
@@ -433,12 +433,14 @@ export function SettingsForm({
               { title: "Security Alerts", description: "Get notified about account security events" },
               { title: "Promotional Offers", description: "Receive updates about new offers and promotions" },
             ].map((item) => (
-              <div key={item.title} className="flex items-center justify-between rounded-xl bg-secondary/30 p-4">
-                <div>
-                  <p className="font-medium text-foreground">{item.title}</p>
-                  <p className="text-sm text-muted-foreground">{item.description}</p>
+              <div key={item.title} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 rounded-lg sm:rounded-xl bg-secondary/30 p-3 sm:p-4">
+                <div className="min-w-0">
+                  <p className="text-sm sm:text-base font-medium text-foreground">{item.title}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{item.description}</p>
                 </div>
-                <Switch defaultChecked />
+                <div className="flex-shrink-0">
+                  <Switch defaultChecked />
+                </div>
               </div>
             ))}
           </div>
@@ -447,9 +449,9 @@ export function SettingsForm({
 
       {/* Payment Tab */}
       <TabsContent value="payment">
-        <Card className="rounded-2xl border-border bg-card p-6">
-          <h3 className="text-lg font-semibold text-foreground">Withdrawal Address</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
+        <Card className="rounded-lg sm:rounded-2xl border-border bg-card p-4 sm:p-6">
+          <h3 className="text-base sm:text-lg font-semibold text-foreground">Withdrawal Address</h3>
+          <p className="mt-1 text-xs sm:text-sm text-muted-foreground">
             Manage your default withdrawal addresses
           </p>
 
