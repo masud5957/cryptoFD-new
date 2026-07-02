@@ -57,36 +57,37 @@ export default async function SettingsPage() {
         ))}
       </div>
 
-      {/* Account Info Card - Premium */}
-      <Card className="rounded-2xl border-border bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20 overflow-hidden">
-        <div className="p-8">
-          <div className="flex items-start gap-6">
+      {/* Account Info Card - Premium - Responsive Mobile First */}
+      <Card className="rounded-lg sm:rounded-2xl border-border bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20 overflow-hidden">
+        <div className="p-4 sm:p-6 md:p-8">
+          <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
             {/* Avatar */}
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-2xl font-bold text-white flex-shrink-0 shadow-lg">
+            <div className="flex h-16 sm:h-20 w-16 sm:w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-xl sm:text-2xl font-bold text-white flex-shrink-0 shadow-lg mx-auto sm:mx-0">
               {profile?.name ? profile.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
             </div>
             
             {/* Account Details */}
-            <div className="flex-1">
-              <h3 className="text-2xl font-bold text-foreground">{profile?.name || "User"}</h3>
-              <p className="text-muted-foreground mt-1">{user.email}</p>
+            <div className="flex-1 min-w-0 text-center sm:text-left">
+              <h3 className="text-lg sm:text-2xl font-bold text-foreground truncate">{profile?.name || "User"}</h3>
+              <p className="text-muted-foreground mt-1 text-sm truncate">{user.email}</p>
               
               {/* Status Badges */}
-              <div className="flex flex-wrap items-center gap-2 mt-4">
-                <Badge variant="outline" className="text-xs gap-1 border-green-500/30 text-green-600 dark:text-green-400 bg-green-500/10">
-                  <Check className="h-3 w-3" />
+              <div className="flex flex-col sm:flex-row flex-wrap items-center sm:items-start gap-2 mt-4 justify-center sm:justify-start">
+                <Badge variant="outline" className="text-xs gap-1 border-green-500/30 text-green-600 dark:text-green-400 bg-green-500/10 whitespace-nowrap">
+                  <Check className="h-3 w-3 flex-shrink-0" />
                   {profile?.isVerified ? "Verified Account" : "Pending Verification"}
                 </Badge>
-                <Badge variant="outline" className="text-xs gap-1 border-blue-500/30 text-blue-600 dark:text-blue-400 bg-blue-500/10">
-                  <Calendar className="h-3 w-3" />
-                  Member since {profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : "N/A"}
+                <Badge variant="outline" className="text-xs gap-1 border-blue-500/30 text-blue-600 dark:text-blue-400 bg-blue-500/10 whitespace-nowrap">
+                  <Calendar className="h-3 w-3 flex-shrink-0" />
+                  <span className="hidden sm:inline">Member since</span>
+                  <span className="inline sm:hidden">Since</span> {profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short' }) : "N/A"}
                 </Badge>
               </div>
             </div>
 
             {/* Status Indicator */}
-            <div className="text-right">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20">
+            <div className="flex justify-center sm:justify-end">
+              <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-green-500/10 border border-green-500/20 flex-shrink-0">
                 <div className="h-2 w-2 rounded-full bg-green-500"></div>
                 <span className="text-xs font-semibold text-green-600 dark:text-green-400">Active</span>
               </div>

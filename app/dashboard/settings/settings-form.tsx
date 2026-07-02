@@ -467,31 +467,31 @@ export function SettingsForm({
             </Alert>
           )}
 
-          <div className="mt-6 space-y-4">
+          <div className="mt-6 space-y-3 sm:space-y-4">
             <div>
-              <label className="text-sm text-muted-foreground">Default USDT (BEP-20) Address</label>
+              <label className="text-xs sm:text-sm text-muted-foreground font-medium">Default USDT (BEP-20) Address</label>
               <Input 
                 placeholder="Enter your BEP-20 (BSC) wallet address (0x...)" 
                 value={usdtAddressState}
                 onChange={(e) => setUsdtAddressState(e.target.value)}
-                className="mt-2 bg-secondary/50 font-mono"
+                className="mt-2 bg-secondary/50 font-mono text-xs sm:text-sm h-9 sm:h-10 break-words"
               />
             </div>
 
-            <div className="rounded-xl bg-yellow-500/10 p-4">
-              <p className="text-sm text-muted-foreground">
-                <span className="font-medium text-yellow-500">Note:</span> Make sure you enter a valid BEP-20 (BSC) address starting with 0x. 
-                Withdrawals to incorrect addresses cannot be recovered.
+            <div className="rounded-lg sm:rounded-xl bg-yellow-500/10 p-3 sm:p-4 border border-yellow-500/20">
+              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+                <span className="font-medium text-yellow-600 dark:text-yellow-500">Note:</span> Make sure you enter a valid BEP-20 (BSC) address starting with 0x. Withdrawals to incorrect addresses cannot be recovered.
               </p>
             </div>
 
             <Button 
               onClick={handleUSDTAddressSubmit}
               disabled={isLoading || !usdtAddressState}
+              className="w-full sm:w-auto text-xs sm:text-sm h-9 sm:h-10"
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 h-3.5 sm:h-4 w-3.5 sm:w-4 animate-spin" />
                   Saving...
                 </>
               ) : (
