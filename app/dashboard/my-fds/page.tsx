@@ -25,44 +25,44 @@ function FDCard({ fd }: { fd: UserFD }) {
     <Card className="group relative rounded-2xl overflow-hidden border border-border bg-card/50 hover:bg-card hover:shadow-xl hover:border-primary/50 transition-all">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       <div className="relative p-6 space-y-4">
-        {/* Header with Status */}
-        <div className="flex items-start justify-between mb-2">
-          <div className="flex-1">
-            <div className="flex items-center gap-3">
-              <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${isActive ? 'from-primary/20 to-primary/10' : 'from-blue-500/20 to-blue-500/10'} group-hover:scale-110 transition-transform duration-300`}>
-                <Wallet className={`h-6 w-6 ${isActive ? 'text-primary' : 'text-blue-500'}`} />
+        {/* Header with Status - Responsive Mobile First */}
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4 mb-2">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start sm:items-center gap-2 sm:gap-3">
+              <div className={`flex h-10 sm:h-12 w-10 sm:w-12 items-center justify-center rounded-lg sm:rounded-xl bg-gradient-to-br ${isActive ? 'from-primary/20 to-primary/10' : 'from-blue-500/20 to-blue-500/10'} group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
+                <Wallet className={`h-5 sm:h-6 w-5 sm:w-6 ${isActive ? 'text-primary' : 'text-blue-500'}`} />
               </div>
-              <div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-bold text-foreground">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-baseline gap-1 sm:gap-2">
+                  <span className="text-lg sm:text-2xl font-bold text-foreground break-words">
                     ${Number(fd.amount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
-                  <span className="text-sm text-muted-foreground font-medium">USDT</span>
+                  <span className="text-xs sm:text-sm text-muted-foreground font-medium">USDT</span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-1 font-medium">{fd.plan?.name} Plan</p>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1 font-medium">{fd.plan?.name} Plan</p>
               </div>
             </div>
           </div>
           
-          <div className="text-right space-y-2">
+          <div className="flex flex-col sm:flex-col gap-2 w-full sm:w-auto text-right sm:text-right">
             <Badge
-              className={
+              className={`w-full sm:w-auto justify-center sm:justify-start ${
                 fd.status === "active"
-                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 border gap-1.5 font-bold"
+                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 border gap-1.5 font-bold text-xs sm:text-sm"
                   : fd.status === "completed"
-                  ? "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20 border gap-1.5 font-bold"
-                  : "bg-muted text-muted-foreground border-border border gap-1.5 font-bold"
-              }
+                  ? "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20 border gap-1.5 font-bold text-xs sm:text-sm"
+                  : "bg-muted text-muted-foreground border-border border gap-1.5 font-bold text-xs sm:text-sm"
+              }`}
             >
               <span className="flex items-center gap-1">
-                {fd.status === "completed" ? <CheckCircle2 className="h-4 w-4" /> : <Flame className="h-4 w-4" />}
+                {fd.status === "completed" ? <CheckCircle2 className="h-3.5 sm:h-4 w-3.5 sm:w-4" /> : <Flame className="h-3.5 sm:h-4 w-3.5 sm:w-4" />}
                 {fd.status.charAt(0).toUpperCase() + fd.status.slice(1)}
               </span>
             </Badge>
-            <div className="flex items-center gap-1.5 text-green-500 justify-end bg-green-500/10 px-3 py-2 rounded-lg border border-green-500/20">
-              <TrendingUp className="h-4 w-4" />
-              <span className="text-lg font-bold">{fd.plan?.dailyRoi}%</span>
-              <span className="text-xs text-muted-foreground font-medium">/day</span>
+            <div className="flex items-center gap-1.5 text-green-500 justify-center sm:justify-end bg-green-500/10 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg border border-green-500/20 text-xs sm:text-sm">
+              <TrendingUp className="h-3.5 sm:h-4 w-3.5 sm:w-4 flex-shrink-0" />
+              <span className="font-bold">{fd.plan?.dailyRoi}%</span>
+              <span className="text-muted-foreground font-medium">/day</span>
             </div>
           </div>
         </div>
