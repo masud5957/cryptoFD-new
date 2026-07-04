@@ -61,9 +61,9 @@ export async function scan() {
         ethers.zeroPadValue(addr, 32)
       );
 
-      // Scan in block chunks
-      for (let from = last + 1; from <= safe; from += 50) {
-        const to = Math.min(from + 49, safe);
+      // Scan in block chunks (10 blocks max for Alchemy free tier compatibility)
+      for (let from = last + 1; from <= safe; from += 10) {
+        const to = Math.min(from + 9, safe);
 
         try {
           // Filter logs where topic[2] (to address) matches our addresses
