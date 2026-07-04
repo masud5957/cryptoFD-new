@@ -90,7 +90,6 @@ export async function processWithdrawals() {
               description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
             },
           });
-          });
 
           console.log(`[WithdrawalExecutor] INSTANT withdrawal ${withdrawal.id} completed: ${tx.hash}`);
         } else {
