@@ -22,7 +22,7 @@ interface ActivityTableProps {
 
 const typeConfig: Record<string, { icon: typeof Layers; gradient: string; label: string }> = {
   fd_earning: { icon: Layers, gradient: "from-emerald-500 to-emerald-600", label: "FD Earning" },
-  referral_earning: { icon: Users, gradient: "from-blue-500 to-blue-600", label: "Referral Bonus" },
+  referral_commission: { icon: Users, gradient: "from-blue-500 to-blue-600", label: "Referral Commission" },
   withdrawal: { icon: ArrowUpFromLine, gradient: "from-orange-500 to-orange-600", label: "Withdrawal" },
   deposit: { icon: ArrowDownToLine, gradient: "from-emerald-500 to-emerald-600", label: "Deposit" },
   fd_investment: { icon: Layers, gradient: "from-violet-500 to-violet-600", label: "New Investment" },
