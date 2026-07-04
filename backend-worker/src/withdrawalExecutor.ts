@@ -79,31 +79,17 @@ export async function processWithdrawals() {
             },
           });
 
-          // Update transaction status to completed
-          await prisma.transaction.update({
-            where: {
-              userId_type_description: {
-                userId: withdrawal.userId,
-                type: "withdrawal",
-                description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
-              },
-            },
+          // Create transaction record for withdrawal
+          await prisma.transaction.create({
             data: {
+              userId: withdrawal.userId,
+              type: "withdrawal",
+              amount: -Number(withdrawal.amount), // Negative for withdrawal
               status: "completed",
               txHash: tx.hash,
+              description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
             },
-          }).catch(() => {
-            // If unique constraint fails, create new transaction
-            return prisma.transaction.create({
-              data: {
-                userId: withdrawal.userId,
-                type: "withdrawal",
-                amount: -Number(withdrawal.amount),
-                status: "completed",
-                txHash: tx.hash,
-                description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
-              },
-            });
+          });
           });
 
           console.log(`[WithdrawalExecutor] INSTANT withdrawal ${withdrawal.id} completed: ${tx.hash}`);
@@ -122,18 +108,17 @@ export async function processWithdrawals() {
         // Refund balance to user on failure
         await incrementBalance(withdrawal.userId, Number(withdrawal.amount));
         
-        // Update transaction to failed
-        await prisma.transaction.update({
-          where: {
-            userId_type_description: {
-              userId: withdrawal.userId,
-              type: "withdrawal",
-              description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
-            },
+        // Create transaction record for failed withdrawal
+        await prisma.transaction.create({
+          data: {
+            userId: withdrawal.userId,
+            type: "withdrawal",
+            amount: -Number(withdrawal.amount), // Negative for withdrawal
+            status: "failed",
+            description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
           },
-          data: { status: "failed" },
         }).catch(() => {
-          // Ignore if update fails
+          // Ignore if creation fails
         });
 
         console.log(`[WithdrawalExecutor] Refunded ${withdrawal.amount} USDT to user ${withdrawal.userId}`);
