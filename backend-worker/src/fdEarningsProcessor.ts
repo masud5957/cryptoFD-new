@@ -19,7 +19,16 @@ export async function processFDEarnings() {
     for (const fd of activeFDs) {
       try {
         const endDate = new Date(fd.endDate);
-        const lastPayout = new Date(fd.lastPayoutDate);
+        
+        // Handle null/invalid lastPayoutDate - initialize to startDate or creation time
+        let lastPayout = fd.lastPayoutDate ? new Date(fd.lastPayoutDate) : new Date(fd.startDate || fd.createdAt);
+        
+        // If lastPayout is still invalid, use today's date minus the duration to ensure ROI is credited
+        if (isNaN(lastPayout.getTime())) {
+          console.warn(`[FDEarnings] Invalid lastPayoutDate for FD ${fd.id}, resetting to endDate minus duration`);
+          lastPayout = new Date(endDate);
+          lastPayout.setDate(lastPayout.getDate() - 30);
+        }
 
         // Check if FD has matured
         if (now >= endDate) {
@@ -102,7 +111,14 @@ async function handleFDMaturity(fd: any) {
   const principalAmount = Number(fd.amount);
   
   // Calculate any remaining unpaid earnings (all days, including weekends)
-  const lastPayout = new Date(fd.lastPayoutDate);
+  // Handle null/invalid lastPayoutDate - use startDate as fallback
+  let lastPayout = fd.lastPayoutDate ? new Date(fd.lastPayoutDate) : new Date(fd.startDate || fd.createdAt);
+  
+  if (isNaN(lastPayout.getTime())) {
+    console.warn(`[FDEarnings] Invalid lastPayoutDate for FD ${fd.id} at maturity, resetting to startDate`);
+    lastPayout = new Date(fd.startDate || fd.createdAt);
+  }
+  
   const endDate = new Date(fd.endDate);
   
   let remainingDays = 0;
