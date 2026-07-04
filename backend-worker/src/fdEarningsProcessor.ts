@@ -44,16 +44,18 @@ export async function processFDEarnings() {
         }
 
         // Calculate days to pay (all days, including weekends)
+        // Only pay for days that haven't been paid yet
         let daysToPay = 0;
         let currentDate = new Date(lastPayout);
         currentDate.setDate(currentDate.getDate() + 1); // Start from next day
         
-        while (currentDate <= now) {
-          daysToPay++;
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
+        // Count days from lastPayout to now
+        const totalDaysElapsed = Math.floor((now.getTime() - lastPayout.getTime()) / (1000 * 60 * 60 * 24));
+        
+        // Only count full 24-hour periods that haven't been paid yet
+        daysToPay = totalDaysElapsed;
 
-        if (daysToPay === 0) continue; // No days to pay
+        if (daysToPay === 0) continue; // No full days to pay
 
         const earningsToPay = Number(fd.dailyEarning) * daysToPay;
 
@@ -120,17 +122,14 @@ async function handleFDMaturity(fd: any) {
   }
   
   const endDate = new Date(fd.endDate);
+  const now = new Date();
   
-  let remainingDays = 0;
-  let currentDate = new Date(lastPayout);
-  currentDate.setDate(currentDate.getDate() + 1);
+  // Calculate actual remaining days that haven't been paid yet
+  const totalDaysFromCreationToMaturity = Math.floor((endDate.getTime() - lastPayout.getTime()) / (1000 * 60 * 60 * 24));
+  const daysAlreadyPaid = Number(fd.totalEarned) / Number(fd.dailyEarning);
+  const remainingDays = totalDaysFromCreationToMaturity - daysAlreadyPaid;
   
-  while (currentDate <= endDate) {
-    remainingDays++;
-    currentDate.setDate(currentDate.getDate() + 1);
-  }
-  
-  const remainingEarnings = Number(fd.dailyEarning) * remainingDays;
+  const remainingEarnings = Math.max(0, Number(fd.dailyEarning) * remainingDays);
 
   try {
     // Get profile for locked_balance update
