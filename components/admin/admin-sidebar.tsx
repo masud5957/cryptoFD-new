@@ -15,6 +15,7 @@ import {
   BarChart3,
   TrendingUp,
   Activity,
+  Sliders,
 } from "lucide-react"
 
 const navigation = [
@@ -28,6 +29,7 @@ const navigation = [
   { name: "Withdrawal History", href: "/admin/withdrawals", icon: ArrowUpFromLine },
   { name: "Fixed Deposits", href: "/admin/fds", icon: Layers },
   { name: "FD Plans", href: "/admin/plans", icon: Settings },
+  { name: "Site Settings", href: "/admin/site-settings", icon: Sliders },
 ]
 
 export function AdminSidebar() {

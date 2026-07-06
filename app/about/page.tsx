@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Logo } from "@/components/logo"
+import { prisma } from "@/lib/db"
 import { 
   TrendingUp, 
   Shield, 
@@ -17,13 +18,43 @@ import {
   Building2
 } from "lucide-react"
 
-export default function AboutPage() {
+async function getSiteStats() {
+  try {
+    let stats = await prisma.siteStats.findUnique({
+      where: { id: "main" }
+    })
+    
+    if (!stats) {
+      stats = await prisma.siteStats.create({
+        data: {
+          id: "main",
+          activeUsers: "10,000+",
+          totalInvested: "$5M+",
+          countries: "50+",
+          yearsExp: "3+",
+          supportEmail: "support@cryptofdforever.com"
+        }
+      })
+    }
+    
+    return stats
+  } catch (error) {
+    console.error("Error fetching site stats:", error)
+    return null
+  }
+}
+
+export default async function AboutPage() {
+  const siteStats = await getSiteStats()
+  
   const stats = [
-    { label: "Active Users", value: "10,000+", icon: Users },
-    { label: "Total Invested", value: "$5M+", icon: TrendingUp },
-    { label: "Countries", value: "50+", icon: Globe },
-    { label: "Years Experience", value: "3+", icon: Award },
+    { label: "Active Users", value: siteStats?.activeUsers || "10,000+", icon: Users },
+    { label: "Total Invested", value: siteStats?.totalInvested || "$5M+", icon: TrendingUp },
+    { label: "Countries", value: siteStats?.countries || "50+", icon: Globe },
+    { label: "Years Experience", value: siteStats?.yearsExp || "3+", icon: Award },
   ]
+  
+  const supportEmail = siteStats?.supportEmail || "support@cryptofdforever.com"
 
   const features = [
     {
@@ -298,8 +329,8 @@ export default function AboutPage() {
               </div>
               <div>
                 <p className="text-sm text-muted-foreground mb-1">Email Support</p>
-                <a href="mailto:support@cryptofd.com" className="text-xl font-semibold text-primary hover:underline">
-                  support@cryptofd.com
+                <a href={`mailto:${supportEmail}`} className="text-xl font-semibold text-primary hover:underline">
+                  {supportEmail}
                 </a>
               </div>
               <div className="flex items-center gap-2 text-muted-foreground mt-4">
@@ -344,7 +375,7 @@ export default function AboutPage() {
             <Link href="/about" className="hover:text-primary">About</Link>
             <Link href="/auth/login" className="hover:text-primary">Login</Link>
             <Link href="/auth/sign-up" className="hover:text-primary">Sign Up</Link>
-            <a href="mailto:support@cryptofd.com" className="hover:text-primary">Contact</a>
+            <a href={`mailto:${supportEmail}`} className="hover:text-primary">Contact</a>
           </div>
           <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} CryptoFD. All rights reserved.
