@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db"
 import { isAdminAuthenticated } from "@/lib/admin-auth"
-import { revalidateTag } from "next/cache"
+import { revalidatePath } from "next/cache"
 
 export async function GET() {
   try {
@@ -62,9 +62,9 @@ export async function PUT(request: Request) {
       }
     })
 
-    console.log("[SiteStats API] Updated successfully, revalidating cache")
+    console.log("[SiteStats API] Updated successfully, revalidating /about page")
     // Revalidate the about page to show new stats
-    revalidateTag("site-stats", "max")
+    revalidatePath("/about")
     
     return Response.json({ success: true, data: stats })
   } catch (error) {
