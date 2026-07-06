@@ -1,7 +1,23 @@
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const path = require('path');
 
 console.log('[Startup] Starting CryptoFD services...\n');
+
+// Seed database before starting services
+console.log('[Startup] Seeding database with initial data...');
+const seedResult = spawnSync('npx', ['tsx', 'scripts/seed-db.ts'], {
+  stdio: 'inherit',
+  cwd: path.join(__dirname, '..'),
+  timeout: 30000
+});
+
+if (seedResult.error) {
+  console.warn('[Startup] Database seed warning (continuing):', seedResult.error);
+} else if (seedResult.status !== 0) {
+  console.warn('[Startup] Database seed exited with status', seedResult.status, '(continuing)');
+} else {
+  console.log('[Startup] ✓ Database seeded successfully\n');
+}
 
 // Start Next.js web server
 console.log('[Startup] Starting Next.js web server on port 3000...');
