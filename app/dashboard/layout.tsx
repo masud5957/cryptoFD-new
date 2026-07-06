@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { getCurrentUser } from "@/lib/auth"
+import { getProfile } from "@/lib/queries"
 import { Sidebar } from "@/components/dashboard/sidebar"
 import { Navbar } from "@/components/dashboard/navbar"
 import { Chatbot } from "@/components/chatbot"
@@ -15,6 +16,9 @@ export default async function DashboardLayout({
     redirect("/auth/login")
   }
 
+  // Fetch profile with photo
+  const profile = await getProfile()
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Sidebar - fixed on desktop */}
@@ -28,7 +32,7 @@ export default async function DashboardLayout({
         <Navbar 
           fullName={user.name || null}
           email={user.email || ""}
-          avatarUrl={null}
+          avatarUrl={profile?.profilePhoto || null}
         />
         
         {/* Main Content - with proper overflow handling */}
