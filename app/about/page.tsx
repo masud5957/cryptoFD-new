@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Logo } from "@/components/logo"
 import { prisma } from "@/lib/db"
+import { unstable_cache } from "next/cache"
 import { 
   TrendingUp, 
   Shield, 
@@ -18,34 +19,41 @@ import {
   Building2
 } from "lucide-react"
 
-async function getSiteStats() {
-  try {
-    let stats = await prisma.siteStats.findUnique({
-      where: { id: "main" }
-    })
-    
-    if (!stats) {
-      stats = await prisma.siteStats.create({
-        data: {
-          id: "main",
-          activeUsers: "10,000+",
-          totalInvested: "$5M+",
-          countries: "50+",
-          yearsExp: "3+",
-          supportEmail: "support@cryptofdforever.com"
-        }
+const getCachedSiteStats = unstable_cache(
+  async () => {
+    try {
+      console.log("[AboutPage] Fetching site stats from database")
+      let stats = await prisma.siteStats.findUnique({
+        where: { id: "main" }
       })
+      
+      if (!stats) {
+        console.log("[AboutPage] Creating default site stats")
+        stats = await prisma.siteStats.create({
+          data: {
+            id: "main",
+            activeUsers: "10,000+",
+            totalInvested: "$5M+",
+            countries: "50+",
+            yearsExp: "3+",
+            supportEmail: "support@cryptofdforever.com"
+          }
+        })
+      }
+      
+      console.log("[AboutPage] Returning stats:", stats)
+      return stats
+    } catch (error) {
+      console.error("[AboutPage] Error fetching site stats:", error)
+      return null
     }
-    
-    return stats
-  } catch (error) {
-    console.error("Error fetching site stats:", error)
-    return null
-  }
-}
+  },
+  ["site-stats"], // Cache key
+  { tags: ["site-stats"], revalidate: 3600 } // Revalidate every hour
+)
 
 export default async function AboutPage() {
-  const siteStats = await getSiteStats()
+  const siteStats = await getCachedSiteStats()
   
   const stats = [
     { label: "Active Users", value: siteStats?.activeUsers || "10,000+", icon: Users },
