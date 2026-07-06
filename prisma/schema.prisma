@@ -227,6 +227,19 @@ model SiteStats {
   @@map("site_stats")
 }
 
+// Dashboard about page statistics (same as SiteStats)
+model DashboardStats {
+  id             String   @id @default("main")
+  activeUsers    String   @default("10,000+") @map("active_users")
+  totalInvested  String   @default("$5M+") @map("total_invested")
+  countries      String   @default("50+")
+  yearsExp       String   @default("3+") @map("years_exp")
+  supportEmail   String   @default("support@cryptofdforever.com") @map("support_email")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("dashboard_stats")
+}
+
 // Daily trading records for historical data
 model TradingDailyRecord {
   id          String   @id @default(uuid())

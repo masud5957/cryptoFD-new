@@ -1,5 +1,3 @@
-"use client"
-
 import { Card, CardContent } from "@/components/ui/card"
 import { 
   TrendingUp, 
@@ -14,13 +12,39 @@ import {
   GraduationCap,
   Building2
 } from "lucide-react"
+import { prisma } from "@/lib/db"
 
-export default function AboutPage() {
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+async function getDashboardStats() {
+  try {
+    console.log("[DashboardAboutPage] Fetching stats from database")
+    let stats = await prisma.siteStats.findUnique({
+      where: { id: "main" }
+    })
+    
+    if (!stats) {
+      console.log("[DashboardAboutPage] Stats not found, using defaults")
+      return null
+    }
+    
+    console.log("[DashboardAboutPage] Retrieved stats:", stats)
+    return stats
+  } catch (error) {
+    console.error("[DashboardAboutPage] Error:", error)
+    return null
+  }
+}
+
+export default async function AboutPage() {
+  const siteStats = await getDashboardStats()
+  
   const stats = [
-    { label: "Active Users", value: "10,000+", icon: Users },
-    { label: "Total Invested", value: "$5M+", icon: TrendingUp },
-    { label: "Countries", value: "50+", icon: Globe },
-    { label: "Years Experience", value: "3+", icon: Award },
+    { label: "Active Users", value: siteStats?.activeUsers || "10,000+", icon: Users },
+    { label: "Total Invested", value: siteStats?.totalInvested || "$5M+", icon: TrendingUp },
+    { label: "Countries", value: siteStats?.countries || "50+", icon: Globe },
+    { label: "Years Experience", value: siteStats?.yearsExp || "3+", icon: Award },
   ]
 
   const features = [
@@ -172,8 +196,8 @@ export default function AboutPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-xs sm:text-sm text-muted-foreground">Need Help? Contact Us</p>
-                <a href="mailto:support@cryptofd.com" className="text-base sm:text-lg font-semibold text-primary hover:underline truncate">
-                  support@cryptofd.com
+                <a href={`mailto:${siteStats?.supportEmail || "support@cryptofdforever.com"}`} className="text-base sm:text-lg font-semibold text-primary hover:underline truncate">
+                  {siteStats?.supportEmail || "support@cryptofdforever.com"}
                 </a>
               </div>
             </div>
