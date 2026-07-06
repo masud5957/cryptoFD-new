@@ -10,6 +10,7 @@ export interface Profile {
   totalEarnings: number
   referralEarnings: number
   usdtAddress: string | null
+  profilePhoto: string | null
   isAdmin?: boolean
   isVerified?: boolean
   createdAt: string | Date

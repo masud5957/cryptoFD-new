@@ -8,6 +8,12 @@ export async function getProfile(): Promise<Profile | null> {
   const user = await getCurrentUser()
   if (!user) return null
 
+  // Fetch profilePhoto from profile table
+  const profile = await prisma.profile.findUnique({
+    where: { id: user.id },
+    select: { profilePhoto: true }
+  })
+
   return {
     id: user.id,
     email: user.email,
@@ -20,6 +26,7 @@ export async function getProfile(): Promise<Profile | null> {
     totalEarnings: Number(user.totalEarnings),
     referralEarnings: Number(user.referralEarnings),
     usdtAddress: user.usdtAddress,
+    profilePhoto: profile?.profilePhoto || null,
     isAdmin: user.isAdmin,
     isVerified: user.isVerified,
     createdAt: user.createdAt,
