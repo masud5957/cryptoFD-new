@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation"
+import Image from "next/image"
 import { getCurrentUser } from "@/lib/auth"
 import { getProfile } from "@/lib/queries"
 import { SettingsForm } from "./settings-form"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { User, Shield, Bell, Lock, Check, Calendar } from "lucide-react"
 
 export default async function SettingsPage() {
@@ -61,10 +63,18 @@ export default async function SettingsPage() {
       <Card className="rounded-lg sm:rounded-2xl border-border bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20 overflow-hidden">
         <div className="p-4 sm:p-6 md:p-8">
           <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
-            {/* Avatar */}
-            <div className="flex h-16 sm:h-20 w-16 sm:w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary to-accent text-xl sm:text-2xl font-bold text-white flex-shrink-0 shadow-lg mx-auto sm:mx-0">
-              {profile?.name ? profile.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
-            </div>
+            {/* Avatar - Show profile photo or initials */}
+            <Avatar className="h-16 sm:h-20 w-16 sm:w-20 flex-shrink-0 mx-auto sm:mx-0 shadow-lg">
+              {profile?.profilePhoto && (
+                <AvatarImage 
+                  src={profile.profilePhoto} 
+                  alt={profile?.name || "User"}
+                />
+              )}
+              <AvatarFallback className="bg-gradient-to-br from-primary to-accent text-xl sm:text-2xl font-bold text-white">
+                {profile?.name ? profile.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
             
             {/* Account Details */}
             <div className="flex-1 min-w-0 text-center sm:text-left">
