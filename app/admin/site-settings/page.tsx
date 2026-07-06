@@ -71,16 +71,23 @@ export default function SiteSettingsPage() {
 
   const handleSave = async () => {
     try {
+      console.log("[AdminForm] Save button clicked")
       setSaving(true)
+      console.log("[AdminForm] Sending data to API:", formData)
+      
       const response = await fetch("/api/admin/site-stats", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       })
 
+      console.log("[AdminForm] API Response status:", response.status)
+      
       if (!response.ok) throw new Error("Failed to save stats")
       
       const data = await response.json()
+      console.log("[AdminForm] API Response data:", data)
+      
       setStats(data.data)
       toast({
         title: "Success",
@@ -88,11 +95,12 @@ export default function SiteSettingsPage() {
       })
       
       // Give server time to revalidate cache, then reload page to fetch fresh data
+      console.log("[AdminForm] Reloading page in 1.5 seconds...")
       setTimeout(() => {
         window.location.reload()
       }, 1500)
     } catch (error) {
-      console.error("Error saving stats:", error)
+      console.error("[AdminForm] Error saving stats:", error)
       toast({
         title: "Error",
         description: "Failed to save site statistics",

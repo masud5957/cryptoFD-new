@@ -33,16 +33,20 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
-    console.log("[SiteStats API] PUT request started")
+    console.log("[SiteStats API] ===== PUT request received =====")
+    
     const isAuthenticated = await isAdminAuthenticated()
+    console.log("[SiteStats API] Authentication result:", isAuthenticated)
+    
     if (!isAuthenticated) {
-      console.log("[SiteStats API] Unauthorized access attempt")
+      console.log("[SiteStats API] Unauthorized access attempt - returning 401")
       return Response.json({ error: "Unauthorized" }, { status: 401 })
     }
 
     const data = await request.json()
-    console.log("[SiteStats API] Updating with data:", data)
+    console.log("[SiteStats API] Request body data:", JSON.stringify(data, null, 2))
 
+    console.log("[SiteStats API] Starting database upsert...")
     const stats = await prisma.siteStats.upsert({
       where: { id: "main" },
       update: {
@@ -62,13 +66,14 @@ export async function PUT(request: Request) {
       }
     })
 
-    console.log("[SiteStats API] Updated successfully, revalidating /about page")
-    // Revalidate the about page to show new stats
+    console.log("[SiteStats API] Database upsert successful - new stats:", JSON.stringify(stats, null, 2))
+    console.log("[SiteStats API] Calling revalidatePath('/about')...")
     revalidatePath("/about")
+    console.log("[SiteStats API] Path revalidated successfully")
     
     return Response.json({ success: true, data: stats })
   } catch (error) {
-    console.error("[SiteStats API] Error updating stats:", error)
-    return Response.json({ error: "Failed to update site stats" }, { status: 500 })
+    console.error("[SiteStats API] CRITICAL ERROR:", error)
+    return Response.json({ error: "Failed to update site stats", details: String(error) }, { status: 500 })
   }
 }
