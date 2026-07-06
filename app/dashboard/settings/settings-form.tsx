@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -70,6 +70,14 @@ export function SettingsForm({
     ? fullName.split(" ").map((n) => n[0]).join("").toUpperCase()
     : email.charAt(0).toUpperCase()
 
+  // Sync avatarUrl prop to photoPreview when prop changes (after router.refresh())
+  useEffect(() => {
+    if (avatarUrl && avatarUrl !== photoPreview) {
+      console.log("[v0] Syncing avatarUrl to photoPreview:", avatarUrl)
+      setPhotoPreview(avatarUrl)
+    }
+  }, [avatarUrl])
+
   const handlePhotoUpload = async (file: File) => {
     // Validate file type
     const allowedTypes = ["image/jpeg", "image/png", "image/webp"]
@@ -103,9 +111,10 @@ export function SettingsForm({
       }
 
       const data = await response.json()
-      // Set preview immediately from response
+      // Set preview immediately from Cloudinary response - this is the new URL
       if (data.photo) {
         setPhotoPreview(data.photo)
+        console.log("[v0] Avatar updated with Cloudinary URL:", data.photo)
       }
       setSuccess("Photo uploaded successfully!")
       // Refresh page after short delay to ensure database is updated
