@@ -60,7 +60,12 @@ async function getSiteStats() {
 }
 
 export default async function AboutPage() {
+  console.log("[AboutPage] ===== PAGE RENDER START =====")
   const siteStats = await getSiteStats()
+  
+  console.log("[AboutPage] siteStats value:", JSON.stringify(siteStats, null, 2))
+  console.log("[AboutPage] siteStats is null?", siteStats === null)
+  console.log("[AboutPage] siteStats is undefined?", siteStats === undefined)
   
   const stats = [
     { label: "Active Users", value: siteStats?.activeUsers || "10,000+", icon: Users },
@@ -69,7 +74,11 @@ export default async function AboutPage() {
     { label: "Years Experience", value: siteStats?.yearsExp || "3+", icon: Award },
   ]
   
+  console.log("[AboutPage] stats array:", stats)
+  
   const supportEmail = siteStats?.supportEmail || "support@cryptofdforever.com"
+  
+  console.log("[AboutPage] PAGE RENDER COMPLETE =====")
 
   const features = [
     {
