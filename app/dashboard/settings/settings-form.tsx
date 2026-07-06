@@ -48,7 +48,7 @@ export function SettingsForm({
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
-  const [photoPreview, setPhotoPreview] = useState<string | null>(avatarUrl && avatarUrl.startsWith('data:') ? avatarUrl : avatarUrl || null)
+  const [photoPreview, setPhotoPreview] = useState<string | null>(avatarUrl || null)
   
   // Profile state
   const [profileData, setProfileData] = useState({
@@ -244,7 +244,7 @@ export function SettingsForm({
               <div className="relative">
                 <Avatar className="h-20 w-20">
                   <AvatarImage 
-                    src={photoPreview && photoPreview.startsWith('data:') ? photoPreview : (avatarUrl && avatarUrl.startsWith('data:') ? avatarUrl : undefined)} 
+                    src={photoPreview || avatarUrl || undefined} 
                     alt={fullName || "User"} 
                   />
                   <AvatarFallback className="bg-primary/20 text-primary text-xl">

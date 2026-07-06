@@ -23,16 +23,33 @@ export async function POST(request: Request) {
       return Response.json({ error: "File too large. Maximum 5MB allowed" }, { status: 400 })
     }
 
-    // Convert file to base64
-    const buffer = await file.arrayBuffer()
-    const base64 = Buffer.from(buffer).toString("base64")
-    const dataUrl = `data:${file.type};base64,${base64}`
+    // Upload to Cloudinary
+    const cloudinaryFormData = new FormData()
+    cloudinaryFormData.append("file", file)
+    cloudinaryFormData.append("upload_preset", process.env.CLOUDINARY_UPLOAD_PRESET || "")
+    cloudinaryFormData.append("folder", "cryptofd-profiles")
+    cloudinaryFormData.append("resource_type", "auto")
 
-    // Update user profile with photo
+    const cloudinaryResponse = await fetch(
+      `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method: "POST",
+        body: cloudinaryFormData,
+      }
+    )
+
+    if (!cloudinaryResponse.ok) {
+      throw new Error("Cloudinary upload failed")
+    }
+
+    const cloudinaryData = await cloudinaryResponse.json()
+    const imageUrl = cloudinaryData.secure_url
+
+    // Update user profile with Cloudinary URL
     const profile = await prisma.profile.update({
       where: { id: user.id },
       data: {
-        profilePhoto: dataUrl,
+        profilePhoto: imageUrl,
       },
     })
 
