@@ -248,14 +248,30 @@ export function SettingsForm({
           )}
 
           <div className="mt-6">
+            {/* Debug: Show what URLs are being used */}
+            {process.env.NODE_ENV === 'development' && (
+              <div className="mb-4 text-xs text-gray-500 p-2 bg-gray-100 rounded">
+                <div>photoPreview: {photoPreview ? `${photoPreview.substring(0, 50)}...` : 'null'}</div>
+                <div>avatarUrl: {avatarUrl ? `${avatarUrl.substring(0, 50)}...` : 'null'}</div>
+              </div>
+            )}
             {/* Avatar */}
             <div className="flex items-center gap-4">
               <div className="relative">
                 <Avatar className="h-20 w-20">
-                  <AvatarImage 
-                    src={photoPreview || avatarUrl || undefined} 
-                    alt={fullName || "User"} 
-                  />
+                  {(photoPreview || avatarUrl) && (
+                    <AvatarImage 
+                      src={photoPreview || avatarUrl} 
+                      alt={fullName || "User"}
+                      onError={(e) => {
+                        console.log("[v0] Avatar image failed to load:", photoPreview || avatarUrl)
+                        e.currentTarget.style.display = "none"
+                      }}
+                      onLoad={() => {
+                        console.log("[v0] Avatar image loaded successfully:", photoPreview || avatarUrl)
+                      }}
+                    />
+                  )}
                   <AvatarFallback className="bg-primary/20 text-primary text-xl">
                     {initials}
                   </AvatarFallback>
