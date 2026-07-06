@@ -152,6 +152,7 @@ export async function getReferrals(): Promise<Referral[]> {
       totalEarnings: 0,
       referralEarnings: 0,
       usdtAddress: null,
+      profilePhoto: null,
       createdAt: r.referred.createdAt.toISOString(),
       updatedAt: r.referred.createdAt.toISOString(),
     } : undefined
