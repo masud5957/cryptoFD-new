@@ -23,13 +23,16 @@ export const revalidate = 0 // Always fetch fresh data
 
 async function getSiteStats() {
   try {
-    console.log("[AboutPage] Fetching site stats from database")
+    console.log("[AboutPage] Starting: Fetching site stats from database")
+    
     let stats = await prisma.siteStats.findUnique({
       where: { id: "main" }
     })
     
+    console.log("[AboutPage] Query result:", JSON.stringify(stats, null, 2))
+    
     if (!stats) {
-      console.log("[AboutPage] Creating default site stats")
+      console.log("[AboutPage] No stats found, creating default site stats")
       stats = await prisma.siteStats.create({
         data: {
           id: "main",
@@ -40,12 +43,18 @@ async function getSiteStats() {
           supportEmail: "support@cryptofdforever.com"
         }
       })
+      console.log("[AboutPage] Created new stats:", JSON.stringify(stats, null, 2))
     }
     
-    console.log("[AboutPage] Returning stats:", stats)
+    console.log("[AboutPage] SUCCESS - Returning stats with values:", {
+      activeUsers: stats?.activeUsers,
+      totalInvested: stats?.totalInvested,
+      countries: stats?.countries,
+      yearsExp: stats?.yearsExp
+    })
     return stats
   } catch (error) {
-    console.error("[AboutPage] Error fetching site stats:", error)
+    console.error("[AboutPage] CRITICAL ERROR fetching site stats:", error)
     return null
   }
 }
