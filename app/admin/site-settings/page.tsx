@@ -84,8 +84,13 @@ export default function SiteSettingsPage() {
       setStats(data.data)
       toast({
         title: "Success",
-        description: "Site statistics updated successfully",
+        description: "Site statistics updated successfully. About page will update in seconds.",
       })
+      
+      // Give server time to revalidate cache, then reload page to fetch fresh data
+      setTimeout(() => {
+        window.location.reload()
+      }, 1500)
     } catch (error) {
       console.error("Error saving stats:", error)
       toast({

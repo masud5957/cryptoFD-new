@@ -18,6 +18,9 @@ import {
   Building2
 } from "lucide-react"
 
+// Disable caching for About page to show real-time stats updates
+export const revalidate = 0 // Always fetch fresh data
+
 async function getSiteStats() {
   try {
     console.log("[AboutPage] Fetching site stats from database")
