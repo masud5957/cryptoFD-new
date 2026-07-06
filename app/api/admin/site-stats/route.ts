@@ -64,7 +64,7 @@ export async function PUT(request: Request) {
 
     console.log("[SiteStats API] Updated successfully, revalidating cache")
     // Revalidate the about page to show new stats
-    revalidateTag("site-stats")
+    revalidateTag("site-stats", "max")
     
     return Response.json({ success: true, data: stats })
   } catch (error) {
