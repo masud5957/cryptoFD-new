@@ -249,12 +249,12 @@ export function SettingsForm({
 
           <div className="mt-6">
             {/* Debug: Show what URLs are being used */}
-            {process.env.NODE_ENV === 'development' && (
-              <div className="mb-4 text-xs text-gray-500 p-2 bg-gray-100 rounded">
-                <div>photoPreview: {photoPreview ? `${photoPreview.substring(0, 50)}...` : 'null'}</div>
-                <div>avatarUrl: {avatarUrl ? `${avatarUrl.substring(0, 50)}...` : 'null'}</div>
-              </div>
-            )}
+            <div className="mb-4 text-xs text-gray-500 p-2 bg-gray-100 rounded">
+              <div className="font-semibold mb-1">Avatar Debug Info:</div>
+              <div>photoPreview: {photoPreview ? `${photoPreview.substring(0, 70)}...` : 'null'}</div>
+              <div>avatarUrl: {avatarUrl ? `${avatarUrl.substring(0, 70)}...` : 'null'}</div>
+              <div>display: {(photoPreview || avatarUrl) ? 'Should Show' : 'No URL'}</div>
+            </div>
             {/* Avatar */}
             <div className="flex items-center gap-4">
               <div className="relative">
