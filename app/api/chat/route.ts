@@ -73,13 +73,10 @@ Strategy: You can withdraw daily earnings anytime, keep principal invested for c
   }
 
   if (lowerMessage.includes('referral') || lowerMessage.includes('earn passive')) {
-    return `CryptoFD Referral Program - 10% Referral Bonus:
+    return `CryptoFD Referral Program - Earn 10% Bonus:
 
 How It Works:
-- When a referral user creates a fixed deposit (FD) of ANY amount, you get 10% referral bonus
-- The bonus is 10% of the referred user's investment amount
-- Unlimited referrals - no maximum cap
-- Bonus is instantly added to your wallet
+When a referral user creates a fixed deposit (FD) of any amount, you will get a referral bonus of 10% of the investment amount.
 
 Examples:
 - Referral invests $100 → You get $10 bonus
@@ -87,14 +84,7 @@ Examples:
 - Referral invests $5,000 → You get $500 bonus
 - Referral invests $10,000 → You get $1,000 bonus
 
-Build Your Passive Income:
-- 5 referrals × $1,000 each = $500 in referral bonuses
-- 10 referrals × $2,000 each = $2,000 in referral bonuses
-- 20 referrals × $5,000 each = $10,000 in referral bonuses
-
-You earn referral bonuses PLUS your own daily investment earnings!
-
-Share your unique referral link and start earning!`
+That's it! Share your referral link and start earning passive income!`
   }
 
   if (lowerMessage.includes('plan') || lowerMessage.includes('investment') && lowerMessage.includes('different')) {
