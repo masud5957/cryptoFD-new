@@ -76,24 +76,65 @@ Strategy: You can withdraw daily earnings anytime, keep principal invested for c
     return `CryptoFD Referral Program - 10% Referral Bonus:
 
 How It Works:
-- When a referral user creates a fixed deposit (FD), you get 10% referral bonus
-- The bonus is calculated from the referred user's investment
+- When a referral user creates a fixed deposit (FD) of ANY amount, you get 10% referral bonus
+- The bonus is 10% of the referred user's investment amount
 - Unlimited referrals - no maximum cap
-- Direct to your wallet
+- Bonus is instantly added to your wallet
 
-Example (Your friend invests $5,000):
-- Their investment: $5,000
-- Your 10% referral bonus: $5,000 × 10% = $500
-- Instant bonus added to your account!
+Examples:
+- Referral invests $100 → You get $10 bonus
+- Referral invests $1,000 → You get $100 bonus
+- Referral invests $5,000 → You get $500 bonus
+- Referral invests $10,000 → You get $1,000 bonus
 
-Build a Network and Earn:
-- 10 referrals × $5,000 average investment: $5,000 (10% bonus)
-- 50 referrals × $5,000 average investment: $25,000 (10% bonus)
-- More referrals = More bonuses!
+Build Your Passive Income:
+- 5 referrals × $1,000 each = $500 in referral bonuses
+- 10 referrals × $2,000 each = $2,000 in referral bonuses
+- 20 referrals × $5,000 each = $10,000 in referral bonuses
 
-You can also earn from your own fixed deposit daily earnings while earning referral bonuses!
+You earn referral bonuses PLUS your own daily investment earnings!
 
-Share your unique referral link and start earning bonuses!`
+Share your unique referral link and start earning!`
+  }
+
+  if (lowerMessage.includes('plan') || lowerMessage.includes('investment') && lowerMessage.includes('different')) {
+    return `CryptoFD Investment Plans - Choose What Works For You:
+
+Available Plans:
+
+1. Starter Plan
+   - Investment Range: $50 - $499
+   - Daily ROI: 2%
+
+2. Bronze Plan
+   - Investment Range: $500 - $1,999
+   - Daily ROI: 2.2%
+
+3. Silver Plan
+   - Investment Range: $2,000 - $4,999
+   - Daily ROI: 2.5%
+
+4. Gold Plan
+   - Investment Range: $5,000 - $9,999
+   - Daily ROI: 2.75%
+
+5. Platinum Plan
+   - Investment Range: $10,000 - $49,999
+   - Daily ROI: 3%
+
+6. Diamond Plan
+   - Investment Range: $50,000+
+   - Daily ROI: 3.3%
+
+How to Choose:
+- Invest what you can afford
+- Higher investments = Higher daily percentage
+- All plans are 30 days
+- Earnings withdraw anytime
+
+Example: $5,000 in Gold Plan = $137.50/day profit!
+
+Which plan interests you?`
   }
 
   if (lowerMessage.includes('security') || lowerMessage.includes('safe')) {
