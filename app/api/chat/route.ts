@@ -16,8 +16,9 @@ const generateFallbackResponse = (message: string): string => {
     return `To create a fixed deposit on CryptoFD:
 
 1. Log into your dashboard
-2. Click "New Investment" or "Create FD"
-3. Choose your plan based on your investment amount:
+2. Open your wallet and add USDT first (this is required for all investments)
+3. Click "New Investment" or "Create FD"
+4. Choose your plan based on your investment amount:
    - Starter: $50-$499 (2% daily)
    - Bronze: $500-$1,999 (2.2% daily)
    - Silver: $2,000-$4,999 (2.5% daily)
@@ -25,9 +26,9 @@ const generateFallbackResponse = (message: string): string => {
    - Platinum: $10,000-$49,999 (3% daily)
    - Diamond: $50,000+ (3.3% daily)
 
-4. Enter your USDT amount
-5. Approve the transaction
-6. Your investment is active immediately!
+5. Enter your USDT amount
+6. Approve the transaction
+7. Your investment is active immediately!
 
 Daily earnings start accruing the next day. After 30 days, your principal + earnings are automatically returned to your wallet.`
   }
@@ -52,8 +53,9 @@ Want to calculate for a different amount? Just tell me the investment size!`
   if (lowerMessage.includes('withdraw')) {
     return `Withdrawal Information:
 
-Daily Earnings: Withdraw ANYTIME
+Daily Earnings: Always and Anytime You Can Withdraw
 - No lock-in period
+- Withdraw your daily earnings whenever you want
 - 3% withdrawal fee applies
 - Processed in 30 minutes to 1 hour
 
@@ -63,34 +65,35 @@ Principal: Locked for 30 days
 - Can immediately reinvest
 
 Withdrawal Fee Example:
-- Withdraw $100 → Fee $3 → You receive $97
-- Withdraw $1,000 → Fee $30 → You receive $970
-- Withdraw $5,000 → Fee $150 → You receive $4,850
+- Withdraw $100 earnings → Fee $3 → You receive $97
+- Withdraw $1,000 earnings → Fee $30 → You receive $970
+- Withdraw $5,000 earnings → Fee $150 → You receive $4,850
 
-Strategy: Withdraw only earnings, keep principal invested for continuous income!`
+Strategy: You can withdraw daily earnings anytime, keep principal invested for continuous income!`
   }
 
   if (lowerMessage.includes('referral') || lowerMessage.includes('earn passive')) {
-    return `CryptoFD Referral Program - 10% Lifetime Commission:
+    return `CryptoFD Referral Program - 10% Referral Bonus:
 
 How It Works:
-- Earn 10% of your referred user's DAILY earnings
-- Completely PASSIVE - automatic payments forever
+- When a referral user creates a fixed deposit (FD), you get 10% referral bonus
+- The bonus is calculated from the referred user's investment
 - Unlimited referrals - no maximum cap
-- Direct to your wallet daily
+- Direct to your wallet
 
-Example (Your friend invests $5,000 Gold @ 2.75%):
-- Their daily earnings: $5,000 × 2.75% = $137.50/day
-- Your 10% commission: $137.50 × 10% = $13.75/day
-- Monthly from 1 referral: $412.50
-- Annual from 1 referral: $5,018.75
+Example (Your friend invests $5,000):
+- Their investment: $5,000
+- Your 10% referral bonus: $5,000 × 10% = $500
+- Instant bonus added to your account!
 
-Build a Network:
-- 10 referrals × $50,000 average: $417.50/day passive income
-- That's $12,525/month without your own investment!
-- 50 referrals: $15,000+/month recurring income
+Build a Network and Earn:
+- 10 referrals × $5,000 average investment: $5,000 (10% bonus)
+- 50 referrals × $5,000 average investment: $25,000 (10% bonus)
+- More referrals = More bonuses!
 
-Share your unique referral link and start earning!`
+You can also earn from your own fixed deposit daily earnings while earning referral bonuses!
+
+Share your unique referral link and start earning bonuses!`
   }
 
   if (lowerMessage.includes('security') || lowerMessage.includes('safe')) {
