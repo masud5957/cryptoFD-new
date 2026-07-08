@@ -33,7 +33,22 @@ const generateFallbackResponse = (message: string): string => {
 Daily earnings start accruing the next day. After 30 days, your principal + earnings are automatically returned to your wallet.`
   }
 
-  if (lowerMessage.includes('profit') || lowerMessage.includes('earn') || lowerMessage.includes('calculate')) {
+  if (lowerMessage.includes('referral') || lowerMessage.includes('earn passive')) {
+    return `CryptoFD Referral Program - Earn 10% Bonus:
+
+How It Works:
+When a referral user creates a fixed deposit (FD) of any amount, you will get a referral bonus of 10% of the investment amount.
+
+Examples:
+- Referral invests $100 → You get $10 bonus
+- Referral invests $1,000 → You get $100 bonus
+- Referral invests $5,000 → You get $500 bonus
+- Referral invests $10,000 → You get $1,000 bonus
+
+That's it! Share your referral link and start earning passive income!`
+  }
+
+  if (lowerMessage.includes('profit') || lowerMessage.includes('calculate') || (lowerMessage.includes('earn') && !lowerMessage.includes('referral'))) {
     return `Here's how CryptoFD profits work:
 
 Daily Earnings Formula: Investment Amount × Daily ROI %
@@ -70,21 +85,6 @@ Withdrawal Fee Example:
 - Withdraw $5,000 earnings → Fee $150 → You receive $4,850
 
 Strategy: You can withdraw daily earnings anytime, keep principal invested for continuous income!`
-  }
-
-  if (lowerMessage.includes('referral') || lowerMessage.includes('earn passive')) {
-    return `CryptoFD Referral Program - Earn 10% Bonus:
-
-How It Works:
-When a referral user creates a fixed deposit (FD) of any amount, you will get a referral bonus of 10% of the investment amount.
-
-Examples:
-- Referral invests $100 → You get $10 bonus
-- Referral invests $1,000 → You get $100 bonus
-- Referral invests $5,000 → You get $500 bonus
-- Referral invests $10,000 → You get $1,000 bonus
-
-That's it! Share your referral link and start earning passive income!`
   }
 
   if (lowerMessage.includes('plan') || lowerMessage.includes('investment') && lowerMessage.includes('different')) {
