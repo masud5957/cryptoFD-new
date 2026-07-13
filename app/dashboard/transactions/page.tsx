@@ -20,7 +20,8 @@ import {
   Percent,
   Coins,
   History,
-  TrendingUp
+  TrendingUp,
+  ExternalLink
 } from "lucide-react"
 import type { Transaction } from "@/lib/types"
 
@@ -100,8 +101,20 @@ function TransactionTable({ data }: { data: Transaction[] }) {
                     {tx.status.charAt(0).toUpperCase() + tx.status.slice(1)}
                   </Badge>
                 </TableCell>
-                <TableCell className="font-mono text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-                  {tx.txHash ? `${tx.txHash.slice(0, 8)}...${tx.txHash.slice(-6)}` : "-"}
+                <TableCell className="font-mono text-xs">
+                  {tx.txHash ? (
+                    <a 
+                      href={`https://bscscan.com/tx/${tx.txHash}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:text-primary/80 hover:underline transition-colors inline-flex items-center gap-1 group"
+                    >
+                      {`${tx.txHash.slice(0, 8)}...${tx.txHash.slice(-6)}`}
+                      <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </a>
+                  ) : (
+                    <span className="text-muted-foreground">-</span>
+                  )}
                 </TableCell>
               </TableRow>
             )
