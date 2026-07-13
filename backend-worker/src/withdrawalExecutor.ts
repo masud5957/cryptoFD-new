@@ -79,15 +79,16 @@ export async function processWithdrawals() {
             },
           });
 
-          // Create transaction record for withdrawal
-          await prisma.transaction.create({
-            data: {
+          // Update existing transaction record (don't create duplicate)
+          await prisma.transaction.updateMany({
+            where: {
               userId: withdrawal.userId,
               type: "withdrawal",
-              amount: -Number(withdrawal.amount), // Negative for withdrawal
+              status: "pending",
+            },
+            data: {
               status: "completed",
               txHash: tx.hash,
-              description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
             },
           });
 
@@ -107,17 +108,18 @@ export async function processWithdrawals() {
         // Refund balance to user on failure
         await incrementBalance(withdrawal.userId, Number(withdrawal.amount));
         
-        // Create transaction record for failed withdrawal
-        await prisma.transaction.create({
-          data: {
+        // Update transaction record to failed (don't create duplicate)
+        await prisma.transaction.updateMany({
+          where: {
             userId: withdrawal.userId,
             type: "withdrawal",
-            amount: -Number(withdrawal.amount), // Negative for withdrawal
+            status: "pending",
+          },
+          data: {
             status: "failed",
-            description: `Withdrawal to ${withdrawal.toAddress.slice(0, 10)}...${withdrawal.toAddress.slice(-6)}`,
           },
         }).catch(() => {
-          // Ignore if creation fails
+          // Ignore if update fails
         });
 
         console.log(`[WithdrawalExecutor] Refunded ${withdrawal.amount} USDT to user ${withdrawal.userId}`);
