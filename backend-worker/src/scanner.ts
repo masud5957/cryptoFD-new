@@ -125,12 +125,6 @@ async function processLog(
   // Parse amount (BSC USDT has 18 decimals)
   const amount = Number(ethers.formatUnits(log.data, USDT_DECIMALS));
 
-  // Minimum deposit check
-  if (amount < 50) {
-    console.log(`[Scanner] Ignoring deposit below minimum: ${amount} USDT (min: 50 USDT)`);
-    return;
-  }
-
   console.log(`[Scanner] Deposit detected: ${amount} USDT to ${to}`);
 
   try {
