@@ -80,11 +80,12 @@ export async function processWithdrawals() {
           });
 
           // Update existing transaction record (don't create duplicate)
+          // Use referenceId to update the CORRECT transaction for THIS withdrawal
           await prisma.transaction.updateMany({
             where: {
               userId: withdrawal.userId,
               type: "withdrawal",
-              status: "pending",
+              referenceId: withdrawal.id,
             },
             data: {
               status: "completed",
@@ -109,11 +110,12 @@ export async function processWithdrawals() {
         await incrementBalance(withdrawal.userId, Number(withdrawal.amount));
         
         // Update transaction record to failed (don't create duplicate)
+        // Use referenceId to update the CORRECT transaction for THIS withdrawal
         await prisma.transaction.updateMany({
           where: {
             userId: withdrawal.userId,
             type: "withdrawal",
-            status: "pending",
+            referenceId: withdrawal.id,
           },
           data: {
             status: "failed",

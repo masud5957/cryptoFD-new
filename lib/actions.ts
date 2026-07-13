@@ -191,7 +191,7 @@ export async function requestWithdrawal(amount: number, address: string) {
       })
       
       // Create withdrawal request (worker will process instantly)
-      await tx.withdrawalRequest.create({
+      const withdrawalRequest = await tx.withdrawalRequest.create({
         data: {
           userId: user.id,
           amount,
@@ -201,6 +201,7 @@ export async function requestWithdrawal(amount: number, address: string) {
       })
 
       // Create transaction record (pending - will be updated to completed by worker)
+      // Store withdrawalRequest.id in referenceId so backend can update the correct transaction
       await tx.transaction.create({
         data: {
           userId: user.id,
@@ -208,6 +209,7 @@ export async function requestWithdrawal(amount: number, address: string) {
           amount: -amount,
           status: "pending",
           description: `Withdrawal to ${address.slice(0, 10)}...${address.slice(-6)}`,
+          referenceId: withdrawalRequest.id,
         }
       })
     })
