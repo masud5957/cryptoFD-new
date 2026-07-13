@@ -38,11 +38,15 @@ export async function processWithdrawals() {
     for (const withdrawal of pendingWithdrawals) {
       try {
         const withdrawAmount = Number(withdrawal.amount);
+        
+        // Calculate 3% platform fee
+        const platformFee = withdrawAmount * 0.03;
+        const amountToUser = withdrawAmount - platformFee;
 
-        console.log(`[WithdrawalExecutor] INSTANT: ${withdrawAmount} USDT to ${withdrawal.toAddress}`);
+        console.log(`[WithdrawalExecutor] INSTANT: ${withdrawAmount} USDT (${amountToUser} to user, ${platformFee} fee) to ${withdrawal.toAddress}`);
 
-        // Check if hot wallet has enough balance
-        if (hotWalletBalanceFormatted < withdrawAmount) {
+        // Check if hot wallet has enough balance (needs full amount to send to user)
+        if (hotWalletBalanceFormatted < amountToUser) {
           console.log(`[WithdrawalExecutor] Insufficient balance, skipping withdrawal ${withdrawal.id}`);
           continue; // Skip but don't fail - will try again later
         }
@@ -53,10 +57,10 @@ export async function processWithdrawals() {
           data: { status: "processing" },
         });
 
-        // Convert amount to wei (18 decimals)
-        const amountWei = ethers.parseUnits(withdrawal.amount.toString(), USDT_DECIMALS);
+        // Convert amount to wei (18 decimals) - SEND ONLY 97% (after 3% fee)
+        const amountWei = ethers.parseUnits(amountToUser.toString(), USDT_DECIMALS);
 
-        // Send USDT transfer
+        // Send USDT transfer (amount after fee deduction)
         const tx = await usdtContract.transfer(withdrawal.toAddress, amountWei);
         console.log(`[WithdrawalExecutor] TX sent: ${tx.hash}`);
 

@@ -180,9 +180,13 @@ export async function requestWithdrawal(amount: number, address: string) {
   }
   
   try {
+    // Calculate 3% platform fee and actual payout
+    const platformFee = amount * 0.03;
+    const amountAfterFee = amount - platformFee;
+    
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await prisma.$transaction(async (tx: any) => {
-      // Deduct from wallet balance
+      // Deduct full amount from wallet balance (includes fee)
       await tx.profile.update({
         where: { id: user.id },
         data: {
@@ -202,13 +206,14 @@ export async function requestWithdrawal(amount: number, address: string) {
 
       // Create transaction record (pending - will be updated to completed by worker)
       // Store withdrawalRequest.id in referenceId so backend can update the correct transaction
+      // Transaction amount is the actual amount user receives (after 3% fee)
       await tx.transaction.create({
         data: {
           userId: user.id,
           type: "withdrawal",
-          amount: -amount,
+          amount: -amountAfterFee,
           status: "pending",
-          description: `Withdrawal to ${address.slice(0, 10)}...${address.slice(-6)}`,
+          description: `Withdrawal to ${address.slice(0, 10)}...${address.slice(-6)} (3% fee: ${platformFee.toFixed(2)} USDT)`,
           referenceId: withdrawalRequest.id,
         }
       })
