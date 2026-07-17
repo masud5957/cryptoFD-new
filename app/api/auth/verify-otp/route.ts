@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import prisma from "@/lib/db"
 import { generateToken, createReferralChain } from "@/lib/auth"
-import { sendWelcomeEmail } from "@/lib/email"
+import { sendSignupBonusEmail, sendWelcomeEmail } from "@/lib/email"
 
 // POST /api/auth/verify-otp - Verify OTP and complete registration/login
 export async function POST(request: NextRequest) {
@@ -87,6 +87,9 @@ export async function POST(request: NextRequest) {
         await createReferralChain(user.id, user.referredBy)
       }
       
+      // Send professional sign-up bonus confirmation email
+      await sendSignupBonusEmail(user.email, user.name || undefined)
+      // Also send welcome email for general onboarding
       await sendWelcomeEmail(user.email, user.name || undefined)
     }
 
