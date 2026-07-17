@@ -159,7 +159,7 @@ export default function TermsOfServicePage() {
             <section>
               <h2 className="text-xl font-semibold text-foreground">12. Contact Information</h2>
               <p className="mt-3 text-muted-foreground leading-relaxed">
-                If you have any questions about these Terms of Service, please contact us at support@cryptofd.com
+                If you have any questions about these Terms of Service, please contact us at support@cryptofdforever.com
               </p>
             </section>
           </div>

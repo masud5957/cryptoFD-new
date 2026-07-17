@@ -434,8 +434,8 @@ function SignUpContent() {
 
           <p className="mt-8 text-center text-xs text-muted-foreground">
             Need help? Contact us at{" "}
-            <a href="mailto:support@cryptofd.com" className="text-primary hover:underline">
-              support@cryptofd.com
+            <a href="mailto:support@cryptofdforever.com" className="text-primary hover:underline">
+              support@cryptofdforever.com
             </a>
           </p>
         </div>

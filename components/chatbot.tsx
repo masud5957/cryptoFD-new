@@ -121,7 +121,7 @@ export function Chatbot() {
         ? error.message 
         : typeof error === 'string' 
           ? error 
-          : "Sorry, I couldn't process your request. Please try again or contact support@cryptofd.com."
+          : "Sorry, I couldn't process your request. Please try again or contact support@cryptofdforever.com."
       
       setMessages(prev => [...prev, {
         id: (Date.now() + 2).toString(),

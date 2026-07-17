@@ -178,7 +178,7 @@ export async function sendWelcomeEmail(email: string, name?: string): Promise<bo
           </div>
           
           <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 0;">
-            Need help? Our support team is available 24/7 at support@cryptofd.com
+            Need help? Our support team is available 24/7 at support@cryptofdforever.com
           </p>
         </div>
         
@@ -276,7 +276,7 @@ export async function sendSignupBonusEmail(email: string, name?: string): Promis
           </p>
           
           <p style="color: #9ca3af; font-size: 13px; line-height: 1.6; margin: 0;">
-            Questions or need assistance? Our dedicated support team is available 24/7 at support@cryptofd.com
+            Questions or need assistance? Our dedicated support team is available 24/7 at support@cryptofdforever.com
           </p>
         </div>
         

@@ -200,8 +200,8 @@ export default function PrivacyPolicyPage() {
               </p>
               <div className="mt-4 rounded-xl bg-secondary/50 p-4">
                 <p className="text-foreground">
-                  <strong>Email:</strong> privacy@cryptofd.com<br />
-                  <strong>Support:</strong> support@cryptofd.com
+                  <strong>Email:</strong> privacy@cryptofdforever.com<br />
+                  <strong>Support:</strong> support@cryptofdforever.com
                 </p>
               </div>
             </section>
