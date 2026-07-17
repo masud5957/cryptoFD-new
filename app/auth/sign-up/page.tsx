@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Loader2, AlertCircle, Shield, TrendingUp, Users, Gift, Mail } from "lucide-react"
+import { Loader2, AlertCircle, Shield, TrendingUp, Users, Gift, Mail, TrendingUp as Zap } from "lucide-react"
 import { Logo } from "@/components/logo"
 
 function SignUpContent() {
@@ -287,8 +287,30 @@ function SignUpContent() {
       {/* Right Side - Sign Up Form */}
       <div className="flex-1 flex items-center justify-center p-4 lg:p-12">
         <div className="w-full max-w-md">
-          <div className="flex items-center justify-center mb-8 lg:hidden">
+          <div className="flex items-center justify-center mb-4 lg:hidden">
             <Logo size="lg" />
+          </div>
+
+          {/* Mobile Promotional Banners */}
+          <div className="lg:hidden space-y-2 mb-6">
+            <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg p-3 text-center">
+              <p className="text-xs font-semibold text-green-600">
+                <TrendingUp className="w-4 h-4 inline mr-1" />
+                Grow your investment daily 3.3% ROI
+              </p>
+            </div>
+            <div className="bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-500/30 rounded-lg p-3 text-center">
+              <p className="text-xs font-semibold text-purple-600">
+                <Users className="w-4 h-4 inline mr-1" />
+                Refer a friend & get 10% commission
+              </p>
+            </div>
+            <div className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 rounded-lg p-3 text-center">
+              <p className="text-xs font-semibold text-amber-600">
+                <Gift className="w-4 h-4 inline mr-1" />
+                Sign up & get 5 USDT sign-up bonus
+              </p>
+            </div>
           </div>
 
           <Card className="border-border/50 bg-card shadow-xl">
