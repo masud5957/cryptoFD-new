@@ -53,19 +53,40 @@ export async function POST(request: NextRequest) {
     const wasVerified = user.isVerified
     console.log("[v0] Marking user as verified. Was verified:", wasVerified)
     
+    const SIGNUP_BONUS = 5 // 5 USDT signup bonus
+    
     await prisma.profile.update({
       where: { id: user.id },
       data: {
         isVerified: true,
         otpCode: null,
         otpExpiresAt: null,
+        // Add 5 USDT signup bonus only for new users
+        ...(wasVerified === false && { walletBalance: { increment: SIGNUP_BONUS } }),
       }
     })
 
-    // If this is first verification (registration), create referral chain
-    if (!wasVerified && user.referredBy) {
-      console.log("[v0] Creating referral chain for user:", user.id)
-      await createReferralChain(user.id, user.referredBy)
+    // If this is first verification (registration), create referral chain and record bonus transaction
+    if (!wasVerified) {
+      console.log("[v0] New user signup - Adding 5 USDT signup bonus for user:", user.id)
+      
+      // Record the signup bonus as a transaction
+      await prisma.transaction.create({
+        data: {
+          userId: user.id,
+          type: "deposit",
+          amount: SIGNUP_BONUS,
+          status: "completed",
+          description: "Sign-up bonus",
+          txHash: null,
+        }
+      })
+      
+      if (user.referredBy) {
+        console.log("[v0] Creating referral chain for user:", user.id)
+        await createReferralChain(user.id, user.referredBy)
+      }
+      
       await sendWelcomeEmail(user.email, user.name || undefined)
     }
 
